@@ -1,0 +1,53 @@
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.iml
+
+# Secrets and signing
+**/.env
+**/.env.*
+!**/.env.example
+**/secrets/
+**/*.pem
+**/*.cer
+**/*.jks
+**/*.jks.old
+**/*.keystore
+**/*.p12
+**/key.properties
+**/signing-details.txt
+**/firebase-adminsdk.json
+
+# Dependencies and build
+**/node_modules/
+**/build/
+**/.dart_tool/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/.pub-cache/
+**/.pub/
+**/coverage/
+**/uploads/
+**/.gradle/
+
+# Flutter generated
+**/windows/flutter/ephemeral/
+**/linux/flutter/ephemeral/
+**/*.apk
+**/*.aab
+**/*.ipa
+app.*.symbols
+app.*.map.json
+
+# Generated presentation previews
+docs/preview/
+docs/slides/
+
+# Old copies not part of the product
+medical-qr-iraq-main/
+medical-qr-admin-desktop/
+
+# Logs
+*.log

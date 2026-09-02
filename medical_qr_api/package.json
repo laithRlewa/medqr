@@ -1,0 +1,20 @@
+{
+  "name": "medical-qr-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "API PostgreSQL لمنصة الرمز الطبي العراقي",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "firebase-admin": "^13.10.0",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^2.0.2",
+    "pg": "^8.13.1"
+  }
+}

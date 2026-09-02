@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <title>MED QR — عرض المنتج الكامل</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet" />
+  <style>
+    @page { size: A4 landscape; margin: 0; }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #e8eef0;
+      font-family: "Tajawal", "Segoe UI", Tahoma, sans-serif;
+      color: #071E27;
+    }
+    .slide {
+      width: 297mm;
+      height: 210mm;
+      padding: 14mm 16mm 16mm;
+      background: #F7FBFC;
+      page-break-after: always;
+      break-after: page;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .slide:last-child { page-break-after: auto; break-after: auto; }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8mm;
+      border-bottom: 1px solid #DCECF1;
+      padding-bottom: 4mm;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      color: #083847;
+      font-size: 13px;
+    }
+    .brand img { width: 28px; height: 28px; object-fit: contain; }
+    .page-num { color: #4F6B76; font-size: 12px; font-weight: 700; }
+    h1 {
+      margin: 0 0 4mm;
+      font-size: 28px;
+      font-weight: 800;
+      color: #083847;
+      line-height: 1.25;
+    }
+    h2 {
+      margin: 0 0 3mm;
+      font-size: 15px;
+      font-weight: 800;
+      color: #157A96;
+    }
+    p, li { font-size: 13.5px; line-height: 1.65; margin: 0 0 3mm; color: #1a3038; }
+    .lead { font-size: 16px; color: #083847; font-weight: 500; max-width: 240mm; }
+    .pills { display: flex; flex-wrap: wrap; gap: 8px; margin: 2mm 0 5mm; }
+    .pill {
+      background: #DCECF1;
+      color: #083847;
+      border-radius: 999px;
+      padding: 3px 12px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .pill.accent { background: #157A96; color: #fff; }
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 2mm 0 5mm; }
+    .stat {
+      background: #fff;
+      border: 1px solid #DCECF1;
+      border-radius: 12px;
+      padding: 8px 10px;
+    }
+    .stat b { display: block; font-size: 22px; color: #157A96; font-weight: 800; }
+    .stat span { font-size: 11.5px; color: #4F6B76; font-weight: 700; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border: 1px solid #DCECF1;
+      border-radius: 10px;
+      overflow: hidden;
+      font-size: 12px;
+    }
+    th {
+      background: #083847;
+      color: #fff;
+      text-align: right;
+      padding: 6px 8px;
+      font-weight: 700;
+    }
+    td {
+      padding: 5px 8px;
+      border-top: 1px solid #E7F1F4;
+      vertical-align: top;
+    }
+    tr:nth-child(even) td { background: #F4FAFB; }
+    .cols { display: grid; gap: 8px; }
+    .cols.3 { grid-template-columns: 1fr 1fr 1fr; }
+    .cols.2 { grid-template-columns: 1fr 1fr; }
+    .card {
+      background: #fff;
+      border: 1px solid #DCECF1;
+      border-radius: 12px;
+      padding: 10px 12px;
+    }
+    .card h3 { margin: 0 0 4px; font-size: 14px; color: #083847; }
+    .note {
+      background: #E8F4F7;
+      border-right: 4px solid #157A96;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 13px;
+      margin-top: auto;
+    }
+    .note.warn { background: #FFF6E8; border-right-color: #E89A2E; }
+    .note.danger { background: #FFF1F1; border-right-color: #C62828; }
+    .cover {
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: #F7FBFC;
+    }
+    .cover .mark { width: 92px; height: 92px; margin-bottom: 8mm; }
+    .cover h1 { font-size: 40px; margin-bottom: 2mm; }
+    .cover .sub { font-size: 20px; color: #157A96; font-weight: 700; margin-bottom: 6mm; }
+    ul { margin: 0 0 3mm; padding: 0 18px 0 0; }
+    .grow { flex: 1; }
+    .foot {
+      position: absolute;
+      left: 16mm;
+      right: 16mm;
+      bottom: 7mm;
+      display: flex;
+      justify-content: space-between;
+      color: #4F6B76;
+      font-size: 11px;
+    }
+  </style>
+</head>
+<body>
+
+<section class="slide cover">
+  <img class="mark" src="../medical_qr_clinic/assets/brand/logo_mark.png" alt="MED QR" />
+  <h1>MED QR</h1>
+  <div class="sub">الرمز الطبي العراقي — عرض المنتج الكامل</div>
+  <p class="lead" style="margin:0 auto 8mm;">منصتك الصحية الرقمية في العراق. سجل طبي موحّد يصل إليه الطبيب بمسحة واحدة، بعد موافقة المريض، ولمدة محدودة.</p>
+  <div class="pills" style="justify-content:center;">
+    <span class="pill accent">صحتك… بمسحة واحدة</span>
+    <span class="pill">سجل طبي موحّد</span>
+    <span class="pill">وصول برمز QR</span>
+    <span class="pill">خصوصية محمية</span>
+  </div>
+  <div class="foot"><span>تطبيق المريض والطبيب · لوحة الإدارة · الخادم</span><span>1 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div class="topbar"><div class="brand"><img src="../medical_qr_clinic/assets/brand/logo_mark.png" alt="" /> MED QR — الرمز الطبي العراقي</div><div class="page-num">2 / 16 · الغلاف التشغيلي</div></div>
+  <h1>ما الذي بين أيدينا اليوم</h1>
+  <div class="stats">
+    <div class="stat"><b>تطبيقان</b><span>عيادة للمرضى والأطباء + لوحة إدارة</span></div>
+    <div class="stat"><b>20</b><span>شاشة في تطبيق العيادة</span></div>
+    <div class="stat"><b>11</b><span>شاشة في لوحة الإدارة</span></div>
+    <div class="stat"><b>22</b><span>جدول في قاعدة البيانات</span></div>
+  </div>
+  <p>الجمهور ثلاثة: المريض الذي يحمل رمزه، والطبيب الذي يمسح ويكتب، والمدير الذي يوافق على الأطباء ويدير الاشتراكات والمظهر. لغة الواجهة عربية واتجاهها من اليمين لليسار، والخدمة تتركّز اليوم في بغداد.</p>
+  <div class="note">هذا الملف هو نسخة PDF قابلة للطباعة والعرض من شرح المنتج الكامل. الشرائح التفاعلية داخل Cursor تبقى للمراجعة السريعة.</div>
+  <div class="foot"><span>عرض المنتج الكامل</span><span>2 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div class="topbar"><div class="brand"><img src="../medical_qr_clinic/assets/brand/logo_mark.png" alt="" /> MED QR</div><div class="page-num">3 / 16 · الفكرة</div></div>
+  <h1>المشكلة والحل</h1>
+  <p class="lead">الملف الورقي يتفرّق بين العيادات. الطبيب يحتاج السجل في الزيارة، والمريض يحتاج ألا يصل أحد إلى بياناته بلا إذن.</p>
+  <table>
+    <thead><tr><th>الوضع السابق</th><th>مع MED QR</th></tr></thead>
+    <tbody>
+      <tr><td>ملفات ورقية أو صور متفرقة</td><td>سجل واحد: زيارات وملفات ووصفات وتشخيصات</td></tr>
+      <tr><td>الطبيب يفتح الملف بلا أثر واضح</td><td>جلسة وصول مسجّلة، والمريض يُبلَّغ فوراً</td></tr>
+      <tr><td>التعديل مفتوح بلا حد زمني</td><td>نافذة كتابة 10 دقائق بعد مسح QR</td></tr>
+      <tr><td>الحجز بالهاتف أو الحضور</td><td>طلب موعد من الخريطة أو ملف الطبيب</td></tr>
+      <tr><td>لا قناة رسمية بعد الزيارة</td><td>رسائل واستبيان متابعة داخل التطبيق</td></tr>
+    </tbody>
+  </table>
+  <div class="note">ما يميّز المنتج: الوصول ليس مفتوحاً دائماً. الطبيب يرى السجل 24 ساعة افتراضياً، ويكتب أو يرفع ملفاً فقط إذا كان المسح حديثاً (10 دقائق). البحث عن مريض يفتح العرض دون صلاحية الكتابة.</div>
+  <div class="foot"><span>عرض المنتج الكامل</span><span>3 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div class="topbar"><div class="brand"><img src="../medical_qr_clinic/assets/brand/logo_mark.png" alt="" /> MED QR</div><div class="page-num">4 / 16 · المنظومة</div></div>
+  <h1>ثلاثة أجزاء، خادم واحد</h1>
+  <table>
+    <thead><tr><th>الجزء</th><th>لمن</th><th>ماذا يفعل</th><th>كيف يدخل</th></tr></thead>
+    <tbody>
+      <tr><td>تطبيق العيادة</td><td>مريض وطبيب</td><td>QR، حجز، مسح، سجلات، رسائل، خريطة</td><td>واتساب OTP لرقم عراقي</td></tr>
+      <tr><td>لوحة الإدارة</td><td>مدير / مالك</td><td>موافقة الأطباء، الاشتراكات، المظهر، التدقيق</td><td>بريد وكلمة مرور</td></tr>
+      <tr><td>الخادم</td><td>كل الأطراف</td><td>المصادقة، البيانات، الرفع، الإشعارات، واتساب</td><td>JWT لسبعة أيام</td></tr>
+    </tbody>
+  </table>
+  <div class="cols 3" style="margin-top:6mm;">
+    <div class="card"><h3>تطبيق العيادة</h3><p>Flutter عربي للجوال وسطح المكتب، بشريط تنقّل مختلف حسب حجم الشاشة.</p></div>
+    <div class="card"><h3>لوحة الإدارة</h3><p>Flutter مستقل. مناطق الخريطة تُدار من تطبيق الطبيب لا من هذه اللوحة.</p></div>
+    <div class="card"><h3>الخادم</h3><p>Node 20 وExpress وPostgreSQL 16 على المنفذ 8080.</p></div>
+  </div>
+  <div class="foot"><span>عرض المنتج الكامل</span><span>4 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div class="topbar"><div class="brand"><img src="../medical_qr_clinic/assets/brand/logo_mark.png" alt="" /> MED QR</div><div class="page-num">5 / 16 · الأدوار</div></div>
+  <h1>ثلاثة أدوار واضحة</h1>
+  <div class="stats">
+    <div class="stat"><b>مريض</b><span>يحمل الرمز ويحجز ويتابع</span></div>
+    <div class="stat"><b>طبيب</b><span>يمسح ويكتب ويدير عيادته</span></div>
+    <div class="stat"><b>مدير</b><span>يوافق ويفعّل ويراقب</span></div>
+    <div class="stat"><b>حساب الطبيب</b><span>قيد الموافقة / غير نشط / نشط</span></div>
+  </div>
+  <table>
+    <thead><tr><th>القدرة</th><th>مريض</th><th>طبيب</th><th>مدير</th></tr></thead>
+    <tbody>
+      <tr><td>عرض السجل الطبي</td><td>سجله فقط</td><td>بعد جلسة وصول</td><td>كل المرضى</td></tr>
+      <tr><td>كتابة زيارة أو ملف</td><td>لا</td><td>10 دقائق بعد مسح QR</td><td>لا من شاشة العيادة</td></tr>
+      <tr><td>حجز موعد</td><td>نعم</td><td>يؤكد أو يرفض</td><td>يرى البيانات</td></tr>
+      <tr><td>خريطة ومناطق</td><td>يختار المنطقة</td><td>ينشئ المنطقة ويضيف أطباء</td><td>عبر API</td></tr>
+      <tr><td>حذف الحساب من الإعدادات</td><td>نعم مع مستنداته</td><td>نعم مع ملفه المهني</td><td>ممنوع من هذا المسار</td></tr>
+    </tbody>
+  </table>
+  <div class="note warn">الطبيب بانتظار الموافقة أو باشتراك منتهٍ يصل إلى الرئيسية وحسابه والإشعارات فقط حتى يعتمد المدير الحساب أو يجدّد الاشتراك.</div>
+  <div class="foot"><span>عرض المنتج الكامل</span><span>5 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div class="topbar"><div class="brand"><img src="../medical_qr_clinic/assets/brand/logo_mark.png" alt="" /> MED QR</div><div class="page-num">6 / 16 · الدخول والأمان</div></div>
+  <h1>من الهاتف إلى الجلسة</h1>
+  <table>
+    <thead><tr><th>المسار</th><th>من يستخدمه</th><th>الخطوات</th></tr></thead>
+    <tbody>
+      <tr><td>تسجيل الدخول</td><td>مريض وطبيب مسجّلان</td><td>رقم الهاتف → إرسال رمز واتساب → تحقق</td></tr>
+      <tr><td>تسجيل مريض</td><td>حساب جديد</td><td>إنشاء حساب → مريض → البيانات → الرمز</td></tr>
+      <tr><td>تسجيل طبيب</td><td>حساب جديد</td><td>تفاصيل ثم التفصيل المهني → تقديم للموافقة</td></tr>
+      <tr><td>دخول المدير</td><td>admin / owner</td><td>بريد وكلمة مرور في لوحة الإدارة</td></tr>
+    </tbody>
+  </table>
+  <div class="cols 2" style="margin-top:6mm;">
+    <div class="card"><h3>قواعد الرمز</h3><p>صالح دقائق، مرة واحدة، بحد خمس محاولات. الرقم العراقي يُحوَّل إلى الصيغة الدولية قبل الإرسال عبر OTPIQ.</p></div>
+    <div class="card"><h3>بعد الدخول</h3><p>JWT لسبعة أيام ثم جلب الحالة دفعة واحدة من bootstrap: المستخدم، الأطباء، المناطق، المواعيد، الزيارات، الملفات، الإشعارات.</p></div>
+  </div>
+  <div class="foot"><span>عرض المنتج الكامل</span><span>6 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div class="topbar"><div class="brand"><img src="../medical_qr_clinic/assets/brand/logo_mark.png" alt="" /> MED QR</div><div class="page-num">7 / 16 · المريض</div></div>
+  <h1>يوم المريض في التطبيق</h1>
+  <p>الشريط السفلي خمسة أزرار: الرئيسية، الأطباء، رمزي في الوسط، الرسائل، المزيد.</p>
+  <table>
+    <thead><tr><th>الشاشة</th><th>الاسم</th><th>ماذا يفعل</th></tr></thead>
+    <tbody>
+      <tr><td>الرئيسية</td><td>الرئيسية</td><td>ترحيب، اختصارات، موعد قادم، أطباء مميزون</td></tr>
+      <tr><td>البطاقة</td><td>رمزي الطبي</td><td>QR، فصيلة الدم، الحساسية، أدوية، جهة طوارئ</td></tr>
+      <tr><td>السجل</td><td>سجلاتي الطبية</td><td>زيارات، تشخيصات، وصفات، ملفات، محادثات، تقييم</td></tr>
+      <tr><td>الحجز</td><td>البحث عن طبيب</td><td>منطقة وتخصص وتاريخ وسبب → إرسال طلب</td></tr>
+      <tr><td>الخريطة</td><td>خريطة الأطباء</td><td>فلتر منطقة، عرض الملف، حجز موعد</td></tr>
+      <tr><td>المواعيد</td><td>مواعيدي</td><td>قيد المراجعة / القادمة / السابقة، إلغاء</td></tr>
+      <tr><td>الحساب</td><td>الإعدادات</td><td>مظهر، إشعارات، خروج، حذف نهائي</td></tr>
+    </tbody>
+  </table>
+  <div class="foot"><span>عرض المنتج الكامل</span><span>7 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div class="topbar"><div class="brand"><img src="../medical_qr_clinic/assets/brand/logo_mark.png" alt="" /> MED QR</div><div class="page-num">8 / 16 · رمز QR</div></div>
+  <h1>قلب النظام: مسح الرمز</h1>
+  <p class="lead">المريض يعرض رمزه من «رمزي الطبي». الطبيب يمسح من الكاميرا أو المعرض، أو يبحث يدوياً. المسح يمنح الكتابة. البحث يفتح العرض فقط.</p>
+  <table>
+    <thead><tr><th>القاعدة</th><th>المدة</th><th>الأثر</th></tr></thead>
+    <tbody>
+      <tr><td>جلسة العرض</td><td>24 ساعة افتراضياً</td><td>الطبيب يرى السجل؛ المدير يضبط الساعات</td></tr>
+      <tr><td>نافذة الكتابة</td><td>10 دقائق من المسح</td><td>زيارة جديدة ورفع ملف طبي فقط</td></tr>
+      <tr><td>تعديل تشخيص</td><td>24 ساعة للزيارة الأخيرة</td><td>لا يُعدَّل تاريخ قديم بعد إغلاق النافذة</td></tr>
+      <tr><td>إعادة المسح</td><td>تعيد ضبط العدّاد</td><td>تعود نافذة الكتابة من جديد</td></tr>
+    </tbody>
+  </table>
+  <div class="note">المريض يتلقى إشعار «تم منح الوصول» عند المسح، وإشعار «زيارة الملف الطبي» عندما يفتح الطبيب السجل. كل ذلك يُكتب في سجل التدقيق.</div>
+  <div class="foot"><span>عرض المنتج الكامل</span><span>8 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div class="topbar"><div class="brand"><img src="../medical_qr_clinic/assets/brand/logo_mark.png" alt="" /> MED QR</div><div class="page-num">9 / 16 · الطبيب</div></div>
+  <h1>عيادة الطبيب داخل التطبيق</h1>
+  <p>الشريط السفلي: الرئيسية، المواعيد، مسح QR في الوسط، الرسائل، المزيد.</p>
+  <table>
+    <thead><tr><th>الأداة</th><th>الاسم</th><th>العمل اليومي</th></tr></thead>
+    <tbody>
+      <tr><td>اللوحة</td><td>لوحة التحكم</td><td>مرضى، زيارات اليوم، جلسات، طلبات بانتظار التأكيد</td></tr>
+      <tr><td>المسح</td><td>مسح رمز المريض</td><td>كاميرا أو معرض أو بحث ثم فتح السجل</td></tr>
+      <tr><td>المرضى</td><td>مرضاي</td><td>من زارهم، عرض السجل، مراسلة</td></tr>
+      <tr><td>الزيارة والملف</td><td>زيارة جديدة / ملف طبي</td><td>أعراض وتشخيص وخطة وأدوية، أو صورة وPDF</td></tr>
+      <tr><td>الجدول</td><td>التوفر والتقويم والإحصائيات</td><td>ساعات الأسبوع، أسبوعان قادمان، مرضى فريدون</td></tr>
+      <tr><td>المناطق</td><td>مناطق الخريطة</td><td>نقطة على الخريطة + اسم + أطباء</td></tr>
+      <tr><td>الصفحة العامة</td><td>صفحتي العامة</td><td>سيرة، شهادات، إنجازات، تقييمات، منشورات</td></tr>
+    </tbody>
+  </table>
+  <div class="foot"><span>عرض المنتج الكامل</span><span>9 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div class="topbar"><div class="brand"><img src="../medical_qr_clinic/assets/brand/logo_mark.png" alt="" /> MED QR</div><div class="page-num">10 / 16 · المواعيد</div></div>
+  <h1>من اختيار الطبيب إلى إكمال الزيارة</h1>
+  <div class="pills">
+    <span class="pill">قيد المراجعة</span>
+    <span class="pill accent">مؤكد</span>
+    <span class="pill">مكتمل</span>
+    <span class="pill">مرفوض</span>
+    <span class="pill">ملغى</span>
+  </div>
+  <table>
+    <thead><tr><th>الخطوة</th><th>من</th><th>التفاصيل</th></tr></thead>
+    <tbody>
+      <tr><td>اختيار الطبيب</td><td>المريض</td><td>خريطة أو بحث أو ملف عام، مع فلتر منطقة</td></tr>
+      <tr><td>اختيار الوقت</td><td>المريض</td><td>فتحات من جدول التوفر + سبب الزيارة</td></tr>
+      <tr><td>القرار</td><td>الطبيب</td><td>تأكيد أو رفض من اللوحة أو المواعيد</td></tr>
+      <tr><td>الإلغاء</td><td>المريض</td><td>من شاشة مواعيدي</td></tr>
+      <tr><td>الإكمال</td><td>الطبيب</td><td>وسم الموعد مكتملاً بعد الزيارة</td></tr>
+    </tbody>
+  </table>
+  <div class="note">ثلاثة عروض للمواعيد: قائمة، أسبوعي، يومي. كل تغيير حالة يولّد إشعاراً للطرف الآخر.</div>
+  <div class="foot"><span>عرض المنتج الكامل</span><span>10 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div class="topbar"><div class="brand"><img src="../medical_qr_clinic/assets/brand/logo_mark.png" alt="" /> MED QR</div><div class="page-num">11 / 16 · الخريطة</div></div>
+  <h1>الخريطة حسب المنطقة</h1>
+  <p class="lead">المريض يختار منطقة بغداد فتنتقل الخريطة إلى مركزها ويظهر أطباؤها. الطبيب يرسم المنطقة من لوحة التحكم.</p>
+  <div class="pills">
+    <span class="pill accent">الكرادة</span>
+    <span class="pill">المنصور</span>
+    <span class="pill">الأعظمية</span>
+    <span class="pill">الجادرية</span>
+    <span class="pill">الكاظمية</span>
+    <span class="pill">الدورة</span>
+  </div>
+  <div class="cols 2">
+    <div class="card"><h3>من جهة المريض</h3><p>فلتر منطقة وتخصص، عرض الملف، حجز موعد. نفس المناطق تظهر في شاشة البحث على الجوال.</p></div>
+    <div class="card"><h3>من جهة الطبيب</h3><p>نقطة على OpenStreetMap، اسم المنطقة، تكبير، ثم إضافة أطباء. الحذف يعطّل المنطقة ويفك الربط.</p></div>
+  </div>
+  <div class="note">مناطق الخريطة ليست شاشة في لوحة الإدارة. تُدار من تطبيق العيادة لأن الطبيب هو من يضع العيادة على الأرض.</div>
+  <div class="foot"><span>عرض المنتج الكامل</span><span>11 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div class="topbar"><div class="brand"><img src="../medical_qr_clinic/assets/brand/logo_mark.png" alt="" /> MED QR</div><div class="page-num">12 / 16 · التواصل والسجلات</div></div>
+  <h1>بعد العيادة: رسالة وسجل وملف</h1>
+  <div class="cols 3">
+    <div class="card"><h3>المحادثات</h3><p>خيط بين مريض وطبيب. الطبيب يرسل نصاً أو استبيان متابعة: عام، دواء، أو ألم.</p></div>
+    <div class="card"><h3>المجتمع</h3><p>منشورات توعية وإنجازات. تصنيفات: مؤتمر، ورشة، منشور علمي، أخبار.</p></div>
+    <div class="card"><h3>الإشعارات</h3><p>وصول ممنوح، زيارة ملف، موعد، تشخيص، وصفة، ملف مرفوع.</p></div>
+  </div>
+  <h2 style="margin-top:5mm;">تبويبات سجل المريض</h2>
+  <table>
+    <thead><tr><th>التبويب</th><th>المحتوى</th></tr></thead>
+    <tbody>
+      <tr><td>الزيارات</td><td>التاريخ، الطبيب، الأعراض، التشخيص، الخطة، الأدوية، المتابعة</td></tr>
+      <tr><td>التشخيصات والوصفات</td><td>مستخرج من الزيارات التي فيها تشخيص أو دواء</td></tr>
+      <tr><td>الملفات</td><td>وصفة، مخبري، أشعة، رنين، طبقي، مستند، صورة — حتى 15 ميغابايت</td></tr>
+      <tr><td>المحادثات</td><td>خيوط الرسائل المرتبطة بهذا المريض</td></tr>
+    </tbody>
+  </table>
+  <div class="foot"><span>عرض المنتج الكامل</span><span>12 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div class="topbar"><div class="brand"><img src="../medical_qr_clinic/assets/brand/logo_mark.png" alt="" /> MED QR</div><div class="page-num">13 / 16 · الحساب</div></div>
+  <h1>الإعدادات وحدّ الحذف</h1>
+  <table>
+    <thead><tr><th>القسم</th><th>التحكم</th></tr></thead>
+    <tbody>
+      <tr><td>المظهر</td><td>الوضع الليلي</td></tr>
+      <tr><td>رسائل واتساب</td><td>تنبيهات المواعيد والرسائل</td></tr>
+      <tr><td>البريد</td><td>ملخص دوري لنشاط الحساب</td></tr>
+      <tr><td>الحساب</td><td>تعديل الملف الشخصي وتسجيل الخروج</td></tr>
+      <tr><td>منطقة الخطر</td><td>حذف نهائي بعد كتابة كلمة «حذف»</td></tr>
+    </tbody>
+  </table>
+  <div class="note danger">الحذف نهائي. المريض يفقد السجل والزيارات والملفات والمواعيد والرسائل ورمز QR. الطبيب يفقد الملف المهني والمنشورات والإنجازات وبطاقة الدفع. الملفات تُمسح من قرص الخادم. حساب المدير لا يُحذف من هنا.</div>
+  <div class="foot"><span>عرض المنتج الكامل</span><span>13 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div class="topbar"><div class="brand"><img src="../medical_qr_clinic/assets/brand/logo_mark.png" alt="" /> MED QR</div><div class="page-num">14 / 16 · الإدارة</div></div>
+  <h1>لوحة الإدارة: تشغيل المنصة</h1>
+  <table>
+    <thead><tr><th>الشاشة</th><th>أهم إجراء</th></tr></thead>
+    <tbody>
+      <tr><td>لوحة التحكم</td><td>أعداد المرضى والأطباء والطلبات ومخطط الدخول</td></tr>
+      <tr><td>الأطباء</td><td>قيد المراجعة / موافق عليهم / معلّقون — موافقة وتعليق</td></tr>
+      <tr><td>تفعيل الاشتراكات</td><td>شهر، 3 أشهر، 6 أشهر، سنة — مبلغ وسجل</td></tr>
+      <tr><td>المرضى والمنشورات والمستخدمون</td><td>عرض، تعليق، أرشفة، تعديل ملفات</td></tr>
+      <tr><td>المظهر</td><td>اسم التطبيق، شعار، ألوان، خط، سمة افتراضية</td></tr>
+      <tr><td>التدقيق والتحليلات</td><td>دخول، مسح QR، حذف حساب، زيارات شهرية</td></tr>
+      <tr><td>الإعدادات</td><td>ساعات جلسة الوصول وساعات تعديل التشخيص</td></tr>
+    </tbody>
+  </table>
+  <div class="foot"><span>عرض المنتج الكامل</span><span>14 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div class="topbar"><div class="brand"><img src="../medical_qr_clinic/assets/brand/logo_mark.png" alt="" /> MED QR</div><div class="page-num">15 / 16 · التقنية</div></div>
+  <h1>كيف بُني النظام</h1>
+  <table>
+    <thead><tr><th>الطبقة</th><th>التقنية</th><th>الاستخدام</th></tr></thead>
+    <tbody>
+      <tr><td>التطبيقات</td><td>Flutter وMaterial 3 وخط Tajawal</td><td>واجهة عربية للجوال وسطح المكتب</td></tr>
+      <tr><td>الرمز والمسح</td><td>qr_flutter وmobile_scanner</td><td>عرض QR ومسحه من كاميرا أو معرض</td></tr>
+      <tr><td>الخريطة</td><td>flutter_map وOpenStreetMap</td><td>مناطق بغداد</td></tr>
+      <tr><td>الخادم</td><td>Node 20 وExpress وJWT</td><td>REST ورفع ملفات حتى 15 ميغابايت</td></tr>
+      <tr><td>البيانات</td><td>PostgreSQL 16 — 22 جدولاً</td><td>مستخدمون، أطباء، مرضى، زيارات، جلسات، مناطق…</td></tr>
+      <tr><td>الدخول</td><td>OTPIQ واتساب</td><td>رمز دخول للعراق</td></tr>
+    </tbody>
+  </table>
+  <div class="note">كل مسار حسّاس يفحص التوكن ثم الدور. زيارة أو ملف جديد يُرفضان إن لم توجد جلسة QR حيّة داخل عشر دقائق. حذف الحساب يجري داخل معاملة واحدة.</div>
+  <div class="foot"><span>عرض المنتج الكامل</span><span>15 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div class="topbar"><div class="brand"><img src="../medical_qr_clinic/assets/brand/logo_mark.png" alt="" /> MED QR</div><div class="page-num">16 / 16 · الخلاصة</div></div>
+  <h1>ما الذي يُروى في دقائق</h1>
+  <div class="stats">
+    <div class="stat"><b>1 رمز</b><span>هوية المريض الطبية</span></div>
+    <div class="stat"><b>10 د</b><span>كتابة الطبيب بعد المسح</span></div>
+    <div class="stat"><b>3 أدوار</b><span>مريض، طبيب، مدير</span></div>
+    <div class="stat"><b>بغداد</b><span>المناطق الست الأولى</span></div>
+  </div>
+  <table>
+    <thead><tr><th>الجملة</th><th>الدليل في المنتج</th></tr></thead>
+    <tbody>
+      <tr><td>المريض يملك الإذن</td><td>QR في جيبه، وإشعار عند كل مسح</td></tr>
+      <tr><td>الطبيب يعمل في العيادة لا في أرشيف مفتوح</td><td>نافذة كتابة قصيرة بعد المسح</td></tr>
+      <tr><td>الحجز مربوط بالمكان</td><td>منطقة على الخريطة ثم طبيب ثم موعد</td></tr>
+      <tr><td>المنصة تُدار</td><td>موافقة، اشتراك، مظهر، تدقيق</td></tr>
+      <tr><td>الخروج نظيف</td><td>حذف الحساب يمسح السجلات والملفات معاً</td></tr>
+    </tbody>
+  </table>
+  <div class="note">سيناريو العرض الحي: مريض يعرض الرمز → طبيب يمسح ويكتب زيارة → الكتابة تُقفل بعد النافذة → المريض يرى السجل والرسالة → المدير يوافق طبيباً ويفعّل اشتراكاً.</div>
+  <div class="foot"><span>MED QR — الرمز الطبي العراقي</span><span>16 / 16</span></div>
+</section>
+
+</body>
+</html>

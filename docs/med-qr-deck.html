@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<title>MED QR — منصة الصحة الرقمية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  @page { size: A4 landscape; margin: 0; }
+
+  :root{
+    --ink:#062A3B;
+    --deep:#0A3B52;
+    --primary:#14738F;
+    --cyan:#23A3CB;
+    --tint:#E1F0F7;
+    --tint2:#F2F9FC;
+    --bg:#F6FBFD;
+    --line:#D5E7EF;
+    --muted:#587886;
+    --gold:#D98C24;
+  }
+
+  *{ box-sizing:border-box; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  html,body{ margin:0; padding:0; background:#dfe8ec; font-family:"Tajawal","Segoe UI",Tahoma,sans-serif; color:var(--ink); }
+
+  .slide{
+    width:297mm; height:210mm;
+    padding:11mm 14mm 9mm;
+    background:var(--bg);
+    position:relative; overflow:hidden;
+    display:flex; flex-direction:column;
+    page-break-after:always; break-after:page;
+  }
+  .slide:last-child{ page-break-after:auto; break-after:auto; }
+  .slide.dark{ background:var(--deep); color:#fff; }
+  .slide.dark h1,.slide.dark h2,.slide.dark h3{ color:#fff; }
+
+  /* ---------- header / footer ---------- */
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding-bottom:3mm; margin-bottom:6mm; border-bottom:1px solid var(--line);
+  }
+  .dark .topbar{ border-bottom-color:rgba(255,255,255,.16); }
+  .brand{ display:flex; align-items:center; gap:7px; }
+  .brand .tile{ width:9mm; height:9mm; background:#fff; border-radius:2.4mm; display:flex; align-items:center; justify-content:center; box-shadow:0 1px 4px rgba(6,42,59,.12); }
+  .brand .tile img{ width:7mm; height:7mm; object-fit:contain; }
+  .brand .wm{ font-weight:900; letter-spacing:.14em; font-size:11.5px; color:var(--deep); }
+  .dark .brand .wm{ color:#fff; }
+  .brand .wm small{ display:block; letter-spacing:0; font-size:8px; font-weight:700; color:var(--muted); }
+  .dark .brand .wm small{ color:#9EC6D6; }
+  .chip{ font-size:10.5px; font-weight:800; color:var(--primary); background:var(--tint); border-radius:999px; padding:3px 12px; }
+  .dark .chip{ color:#CFE9F4; background:rgba(255,255,255,.12); }
+
+  .foot{
+    margin-top:auto; padding-top:3.5mm; border-top:1px solid var(--line);
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:9px; font-weight:700; color:var(--muted);
+  }
+  .dark .foot{ border-top-color:rgba(255,255,255,.16); color:#8FBACC; }
+  .foot .num{ background:var(--primary); color:#fff; border-radius:999px; padding:2px 9px; font-size:9px; }
+  .dark .foot .num{ background:var(--cyan); color:#06283A; }
+
+  /* ---------- typography ---------- */
+  h1{ margin:0 0 3mm; font-size:27px; font-weight:900; color:var(--deep); line-height:1.24; }
+  h2{ margin:0 0 2.5mm; font-size:14px; font-weight:900; color:var(--primary); }
+  h3{ margin:0 0 1.8mm; font-size:12.6px; font-weight:900; color:var(--deep); }
+  p,li{ font-size:12.3px; line-height:1.72; margin:0 0 2.4mm; color:#204254; }
+  .dark p,.dark li{ color:#D3E7F0; }
+  .lead{ font-size:14px; line-height:1.68; color:#12435A; font-weight:500; }
+  .dark .lead{ color:#CFE6F0; }
+  .kicker{ font-size:10.5px; font-weight:900; letter-spacing:.06em; color:var(--cyan); margin:0 0 2mm; }
+  ul{ margin:0 0 2mm; padding-inline-start:16px; }
+  li{ margin-bottom:1.2mm; }
+  b.hl{ color:var(--primary); }
+  .dark b.hl{ color:#79D0EC; }
+
+  /* ---------- layout helpers ---------- */
+  .body{ flex:1; display:flex; flex-direction:column; min-height:0; }
+  .split{ display:grid; gap:9mm; align-items:start; flex:1; min-height:0; }
+  .split.text-phones{ grid-template-columns:1fr auto; }
+  .split.phones-text{ grid-template-columns:auto 1fr; }
+  .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:5mm; align-items:start; }
+  .grid3{ display:grid; grid-template-columns:repeat(3,1fr); gap:5mm; align-items:start; }
+  .grid4{ display:grid; grid-template-columns:repeat(4,1fr); gap:4mm; align-items:start; }
+  .row{ display:flex; gap:5mm; align-items:flex-start; }
+
+  /* ---------- cards ---------- */
+  .card{
+    background:#fff; border:1px solid var(--line); border-radius:4mm;
+    padding:4.5mm 5mm; box-shadow:0 1px 3px rgba(6,42,59,.05);
+  }
+  .card.tint{ background:var(--tint2); }
+  .card.solid{ background:var(--deep); border-color:var(--deep); color:#fff; }
+  .card.solid p,.card.solid li{ color:#CFE6F0; }
+  .card.solid h3{ color:#fff; }
+  .dark .card{ background:rgba(255,255,255,.07); border-color:rgba(255,255,255,.16); box-shadow:none; }
+  .dark .card h3{ color:#fff; }
+  .card p:last-child,.card ul:last-child,.card li:last-child{ margin-bottom:0; }
+  .card .ico{
+    width:8mm; height:8mm; border-radius:2.4mm; background:var(--tint); color:var(--primary);
+    display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:900; margin-bottom:2.5mm;
+  }
+  .dark .card .ico{ background:rgba(255,255,255,.14); color:#9FDCF3; }
+  .card.solid .ico{ background:rgba(255,255,255,.14); color:#9FDCF3; }
+
+  /* ---------- pills, stats ---------- */
+  .pills{ display:flex; flex-wrap:wrap; gap:5px; }
+  .pill{ background:var(--tint); color:var(--deep); border-radius:999px; padding:2.5px 10px; font-size:10px; font-weight:800; }
+  .pill.solid{ background:var(--primary); color:#fff; }
+  .pill.cyan{ background:var(--cyan); color:#06283A; }
+  .dark .pill{ background:rgba(255,255,255,.13); color:#DCF0F8; }
+
+  .stats{ display:grid; grid-template-columns:repeat(4,1fr); gap:4mm; }
+  .stat{ background:#fff; border:1px solid var(--line); border-radius:3.5mm; padding:3.5mm 4mm; }
+  .dark .stat{ background:rgba(255,255,255,.07); border-color:rgba(255,255,255,.16); }
+  .stat b{ display:block; font-size:23px; font-weight:900; color:var(--primary); line-height:1.1; }
+  .dark .stat b{ color:#79D0EC; }
+  .stat span{ display:block; font-size:10px; font-weight:800; color:var(--muted); margin-top:1mm; }
+  .dark .stat span{ color:#A9CEDD; }
+
+  /* ---------- steps ---------- */
+  .steps{ display:grid; grid-template-columns:repeat(3,1fr); gap:5mm; align-items:start; }
+  .step{ background:#fff; border:1px solid var(--line); border-radius:4mm; padding:4mm 4.5mm; position:relative; }
+  .step .n{
+    position:absolute; top:-4mm; inset-inline-start:4mm;
+    width:8mm; height:8mm; border-radius:50%; background:var(--primary); color:#fff;
+    display:flex; align-items:center; justify-content:center; font-weight:900; font-size:12px;
+  }
+  .step h3{ margin-top:3mm; }
+
+  /* ---------- phone mockup ---------- */
+  .phones{ display:flex; gap:6mm; align-items:flex-start; justify-content:center; }
+  .phone{ margin:0; text-align:center; }
+  .phone .frame{
+    width:var(--pw,48mm); padding:1.5mm 1.5mm 1.5mm;
+    background:#0A2C3A;
+    border:0.35mm solid #17495C;
+    border-radius:5.5mm; position:relative;
+    box-shadow:0 5px 16px rgba(6,42,59,.26);
+  }
+  .phone .frame img{ width:100%; display:block; border-radius:4.2mm; }
+  .phone figcaption{ margin-top:2.5mm; font-size:9.5px; font-weight:800; color:var(--muted); }
+  .dark .phone figcaption{ color:#A9CEDD; }
+  .phone.sm{ --pw:44mm; }
+  .phone.md{ --pw:50mm; }
+  .phone.lg{ --pw:58mm; }
+  .phone.xl{ --pw:66mm; }
+
+  /* ---------- annotated notes next to phones ---------- */
+  .note{ display:flex; gap:3mm; margin-bottom:3mm; }
+  .note .dot{
+    flex:none; width:6.5mm; height:6.5mm; border-radius:50%; background:var(--tint);
+    color:var(--primary); font-weight:900; font-size:10px; display:flex; align-items:center; justify-content:center;
+  }
+  .dark .note .dot{ background:rgba(255,255,255,.14); color:#9FDCF3; }
+  .note div p{ margin:0; }
+  .note > div > b{ display:block; font-size:12.3px; color:var(--deep); margin-bottom:.8mm; }
+  .dark .note > div > b{ color:#fff; }
+
+  /* ---------- table ---------- */
+  table{ width:100%; border-collapse:collapse; background:#fff; border:1px solid var(--line); border-radius:3mm; overflow:hidden; }
+  th,td{ text-align:start; padding:2.6mm 3.5mm; font-size:10.8px; border-bottom:1px solid var(--line); }
+  th{ background:var(--tint); color:var(--deep); font-weight:900; font-size:10.5px; }
+  tr:last-child td{ border-bottom:none; }
+  td b{ color:var(--deep); }
+
+  /* ---------- cover ---------- */
+  .cover{ padding:0; }
+  .cover .wrap{ flex:1; display:grid; grid-template-columns:1.15fr .85fr; }
+  .cover .left{ padding:20mm 16mm 14mm; display:flex; flex-direction:column; justify-content:center; }
+  .cover .right{ position:relative; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,.05); }
+  .cover .logo-tile{
+    width:26mm; height:26mm; background:#fff; border-radius:7mm;
+    display:flex; align-items:center; justify-content:center; box-shadow:0 8px 24px rgba(0,0,0,.28);
+  }
+  .cover .logo-tile img{ width:20mm; height:20mm; object-fit:contain; }
+  .cover .wordmark{ font-size:44px; font-weight:900; letter-spacing:.22em; margin:6mm 0 0; color:#fff; text-align:right; }
+  .cover .tag{ font-size:17px; font-weight:700; color:#8FD6EF; margin:2mm 0 5mm; }
+  .cover .desc{ font-size:13.5px; line-height:1.75; color:#CBE4EF; max-width:150mm; }
+  .cover .rule{ width:34mm; height:1.2mm; background:var(--cyan); border-radius:2mm; margin:6mm 0; }
+  .cover .metaline{ margin-top:8mm; font-size:10.5px; font-weight:800; color:#8FBACC; letter-spacing:.04em; }
+  .cover .glowdots{ position:absolute; inset:0; opacity:.14;
+    background-image:radial-gradient(#fff 1.1px, transparent 1.2px); background-size:7mm 7mm; }
+
+  /* ---------- closing ---------- */
+  .close-center{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; }
+  .close-center .logo-tile{ width:22mm; height:22mm; background:#fff; border-radius:6mm; display:flex; align-items:center; justify-content:center; box-shadow:0 8px 24px rgba(0,0,0,.3); }
+  .close-center .logo-tile img{ width:17mm; height:17mm; object-fit:contain; }
+
+  .callout{
+    border-inline-start:1.2mm solid var(--cyan);
+    background:var(--tint2); border-radius:0 3mm 3mm 0; padding:3mm 4mm; font-size:11.5px; color:#12435A;
+  }
+  .dark .callout{ background:rgba(255,255,255,.08); color:#D3E7F0; }
+</style>
+</head>
+<body>
+
+<!-- ============ 1 · COVER ============ -->
+<section class="slide dark cover">
+  <div class="wrap">
+    <div class="left">
+      <div class="logo-tile"><img src="screens/logo_mark.png" alt="MED QR" /></div>
+      <div class="wordmark" dir="ltr">MED QR</div>
+      <div class="tag">منصّتك الصحية الرقمية في العراق</div>
+      <div class="rule"></div>
+      <p class="desc">
+        سجلّ طبي واحد يرافق المريض أينما ذهب، ويُفتح للطبيب في ثانية واحدة بمسح رمز <span dir="ltr">QR</span>.
+        من حجز الموعد إلى التشخيص والوصفة والمتابعة بعد الزيارة — كل شيء في تطبيق واحد،
+        بالعربية، ومصمَّم لواقع العيادات والمرضى في العراق.
+      </p>
+      <div style="display:flex; gap:6mm; margin-top:9mm;">
+        <div style="border-inline-start:0.9mm solid var(--cyan); padding-inline-start:4mm;">
+          <b style="display:block; font-size:19px; font-weight:900; color:#fff;">تطبيق المريض</b>
+          <span style="font-size:10.5px; color:#8FBACC; font-weight:700;">سجل · بطاقة · حجز · متابعة</span>
+        </div>
+        <div style="border-inline-start:0.9mm solid var(--cyan); padding-inline-start:4mm;">
+          <b style="display:block; font-size:19px; font-weight:900; color:#fff;">تطبيق الطبيب</b>
+          <span style="font-size:10.5px; color:#8FBACC; font-weight:700;">مسح · تشخيص · مواعيد</span>
+        </div>
+        <div style="border-inline-start:0.9mm solid var(--cyan); padding-inline-start:4mm;">
+          <b style="display:block; font-size:19px; font-weight:900; color:#fff;">لوحة الإدارة</b>
+          <span style="font-size:10.5px; color:#8FBACC; font-weight:700;">اعتماد · رقابة · قياس</span>
+        </div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="glowdots"></div>
+      <figure class="phone xl" style="position:relative;">
+        <div class="frame"><img src="screens/login.png" alt="شاشة الدخول" /></div>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2 · لمحة ============ -->
+<section class="slide">
+  <header class="topbar">
+    <div class="brand"><span class="tile"><img src="screens/logo_mark.png" alt=""/></span><span class="wm" dir="ltr">MED QR<small>منصة الصحة الرقمية</small></span></div>
+    <span class="chip">لمحة عامة</span>
+  </header>
+  <div class="body">
+    <p class="kicker">ما هو المنتج</p>
+    <h1>منظومة صحية متكاملة تربط المريض بطبيبه<br/>عبر رمز واحد</h1>
+    <p class="lead" style="max-width:225mm;">
+      <span dir="ltr">MED QR</span> ليس تطبيق حجز مواعيد فقط. هو ثلاث منتجات متكاملة على قاعدة بيانات واحدة:
+      تطبيق للمريض يحمل سجلّه الطبي وبطاقة الطوارئ، تطبيق للطبيب يدير عيادته ويقرأ سجل المريض بمسح فوري،
+      ولوحة إدارة مركزية تراقب المنظومة وتوثّق كل إجراء.
+    </p>
+
+    <div class="stats" style="margin:5mm 0 5mm;">
+      <div class="stat"><b>3</b><span>أدوار مستقلة: مريض · طبيب · إدارة</span></div>
+      <div class="stat"><b>32</b><span>شاشة في تطبيق العيادة والمريض</span></div>
+      <div class="stat"><b>56</b><span>واجهة برمجية مؤمَّنة على الخادم</span></div>
+      <div class="stat"><b>22</b><span>جدولاً مترابطاً في قاعدة البيانات</span></div>
+    </div>
+
+    <div class="grid4">
+      <div class="card">
+        <div class="ico">QR</div>
+        <h3>هوية طبية فورية</h3>
+        <p>لكل مريض رمز <span dir="ltr">QR</span> دائم يفتح ملفه للطبيب المصرَّح له خلال ثوانٍ، بدل الأوراق والملفات الضائعة.</p>
+      </div>
+      <div class="card">
+        <div class="ico">◎</div>
+        <h3>سجل موحّد</h3>
+        <p>الزيارات والتشخيصات والوصفات والتحاليل والأشعة في مكان واحد، مرتبة زمنياً ومتاحة للمريض دائماً.</p>
+      </div>
+      <div class="card">
+        <div class="ico">⌖</div>
+        <h3>وصول جغرافي</h3>
+        <p>خريطة أطباء حسب المنطقة والتخصص، مع صفحة تعريفية لكل طبيب وحجز مباشر من داخل التطبيق.</p>
+      </div>
+      <div class="card">
+        <div class="ico">✉</div>
+        <h3>متابعة بعد الزيارة</h3>
+        <p>محادثة مباشرة بين المريض وطبيبه بعد الزيارة، تقلّل المراجعات غير الضرورية وتحسّن الالتزام بالعلاج.</p>
+      </div>
+    </div>
+
+    <div class="card solid" style="margin-top:5mm;">
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:8mm;">
+        <p style="margin:0; max-width:170mm;">
+          الفارق الجوهري: التطبيقات الصحية المتاحة اليوم تركّز على <b style="color:#8FD6EF;">الحجز</b> فقط، وتنتهي علاقتها بالمستخدم عند باب العيادة.
+          <span dir="ltr">MED QR</span> يبدأ من هناك — فيسجّل ما حدث داخل العيادة، ويحفظه للمريض، ويجعله متاحاً للطبيب التالي.
+        </p>
+        <div class="pills" style="flex:none;">
+          <span class="pill cyan">حجز</span>
+          <span class="pill cyan">سجل</span>
+          <span class="pill cyan">متابعة</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="foot"><span>MED QR — منصة الصحة الرقمية</span><span class="num">02</span></footer>
+</section>
+
+<!-- ============ 3 · المشكلة ============ -->
+<section class="slide">
+  <header class="topbar">
+    <div class="brand"><span class="tile"><img src="screens/logo_mark.png" alt=""/></span><span class="wm" dir="ltr">MED QR<small>منصة الصحة الرقمية</small></span></div>
+    <span class="chip">الفرصة</span>
+  </header>
+  <div class="body">
+    <p class="kicker">لماذا نحتاج هذه المنصة</p>
+    <h1>الملف الطبي في العراق ما زال ورقة في جيب المريض</h1>
+    <p class="lead" style="max-width:225mm;">
+      المريض يحمل أكياس تحاليل وصور أشعة من عيادة إلى أخرى، والطبيب يبدأ كل زيارة من الصفر.
+      النتيجة: وقت ضائع، فحوصات مكرّرة، وقرارات طبية تُتخذ بمعلومات ناقصة.
+    </p>
+
+    <div class="grid3" style="margin-top:5mm; gap:5mm;">
+      <div class="card">
+        <h2>ما يعانيه المريض</h2>
+        <ul>
+          <li><b>تاريخ مبعثر:</b> كل عيادة تحتفظ بجزء من القصة، ولا أحد يملك الصورة الكاملة.</li>
+          <li><b>ضياع المستندات:</b> تحاليل وأشعة تُفقد أو تتلف، فتُعاد على حساب المريض.</li>
+          <li><b>صعوبة الوصول:</b> البحث عن طبيب مناسب قريب يتم عبر التوصيات الشفهية والاتصالات.</li>
+          <li><b>خطر الطوارئ:</b> في الحالة الحرجة لا أحد يعرف فصيلة دمه أو حساسيته أو أمراضه المزمنة.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h2>ما يعانيه الطبيب</h2>
+        <ul>
+          <li><b>بداية من الصفر:</b> وقت طويل في كل زيارة لإعادة بناء تاريخ المريض شفهياً.</li>
+          <li><b>إدارة يدوية:</b> المواعيد على دفتر أو تطبيق محادثة، مع إلغاءات وتضارب في الجدول.</li>
+          <li><b>لا بيانات:</b> لا مؤشرات عن حجم العمل أو التخصصات الأكثر طلباً أو انتظام المرضى.</li>
+          <li><b>حضور رقمي ضعيف:</b> لا واجهة مهنية تعرّف بالطبيب وتخصصه وتقييمات مرضاه.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h2>ما تعانيه المنظومة</h2>
+        <ul>
+          <li><b>بيانات غير مترابطة:</b> كل عيادة جزيرة معلوماتية منفصلة عن الأخرى.</li>
+          <li><b>هدر متكرر:</b> فحوصات وتحاليل تُعاد لأن نتائجها السابقة غير متاحة.</li>
+          <li><b>غياب المؤشرات:</b> لا صورة مجمّعة عن الأمراض الشائعة أو توزّع الخدمة جغرافياً.</li>
+          <li><b>لا أساس رقمي:</b> أي مشروع صحي رقمي يحتاج سجلاً موحّداً كنقطة انطلاق — وهو غير موجود.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:5mm;">
+      كل هذه المشاكل جذرها واحد: <b class="hl">لا توجد طبقة بيانات مشتركة</b> بين المريض والطبيب.
+      <span dir="ltr">MED QR</span> يبني هذه الطبقة، ويجعل مفتاحها بيد المريض نفسه.
+    </div>
+  </div>
+  <footer class="foot"><span>MED QR — منصة الصحة الرقمية</span><span class="num">03</span></footer>
+</section>
+
+<!-- ============ 4 · كيف يعمل ============ -->
+<section class="slide">
+  <header class="topbar">
+    <div class="brand"><span class="tile"><img src="screens/logo_mark.png" alt=""/></span><span class="wm" dir="ltr">MED QR<small>منصة الصحة الرقمية</small></span></div>
+    <span class="chip">آلية العمل</span>
+  </header>
+  <div class="body">
+    <p class="kicker">من الرمز إلى السجل الكامل</p>
+    <h1>ثلاث خطوات فقط تفصل الطبيب عن التاريخ الطبي للمريض</h1>
+
+    <div class="split text-phones" style="margin-top:4mm;">
+      <div>
+        <div class="steps" style="margin-top:4mm;">
+          <div class="step">
+            <span class="n">١</span>
+            <h3>المريض يعرض رمزه</h3>
+            <p>رمز <span dir="ltr">QR</span> ثابت داخل التطبيق، يعمل بدون إنترنت على جهاز المريض ويمكن حفظه كصورة.</p>
+          </div>
+          <div class="step">
+            <span class="n">٢</span>
+            <h3>الطبيب يمسح الرمز</h3>
+            <p>المسح من داخل تطبيق الطبيب يفتح <b class="hl">جلسة وصول موثّقة</b> إلى ملف المريض فوراً.</p>
+          </div>
+          <div class="step">
+            <span class="n">٣</span>
+            <h3>تُسجَّل الزيارة</h3>
+            <p>التشخيص والوصفة والملفات تُضاف إلى السجل، ويراها المريض في تطبيقه مباشرة.</p>
+          </div>
+        </div>
+
+        <div class="grid2" style="margin-top:6mm;">
+          <div class="card tint">
+            <h3>بطاقة الطوارئ</h3>
+            <p>الاسم والعمر وفصيلة الدم وجهة الاتصال تظهر للطبيب فور المسح — معلومات قد تنقذ حياة في الحالات الحرجة.</p>
+          </div>
+          <div class="card tint">
+            <h3>سيطرة المريض</h3>
+            <p>لا وصول بدون رمز المريض. الجلسة محدودة زمنياً وكل فتح وكل تعديل مسجَّل في سجل تدقيق دائم.</p>
+          </div>
+        </div>
+
+        <div class="card solid" style="margin-top:5mm;">
+          <h3>ما يظهر أمام الطبيب لحظة المسح</h3>
+          <div class="grid4" style="gap:4mm; margin-top:3mm;">
+            <div><b style="color:#8FD6EF; font-size:11.5px;">بيانات الطوارئ</b><p style="font-size:11px; margin:1mm 0 0;">فصيلة الدم وجهة الاتصال</p></div>
+            <div><b style="color:#8FD6EF; font-size:11.5px;">الزيارات السابقة</b><p style="font-size:11px; margin:1mm 0 0;">مرتبة زمنياً مع التشخيص</p></div>
+            <div><b style="color:#8FD6EF; font-size:11.5px;">الوصفات والأدوية</b><p style="font-size:11px; margin:1mm 0 0;">ما وُصف سابقاً ومن وصفه</p></div>
+            <div><b style="color:#8FD6EF; font-size:11.5px;">التحاليل والأشعة</b><p style="font-size:11px; margin:1mm 0 0;">ملفات مرفوعة قابلة للعرض</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phones">
+        <figure class="phone lg">
+          <div class="frame"><img src="screens/patient-qr.png" alt="بطاقة المريض" /></div>
+          <figcaption>البطاقة الطبية للمريض — رمز <span dir="ltr">QR</span> ومعلومات الطوارئ</figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+  <footer class="foot"><span>MED QR — منصة الصحة الرقمية</span><span class="num">04</span></footer>
+</section>
+
+<!-- ============ 5 · الأدوار ============ -->
+<section class="slide">
+  <header class="topbar">
+    <div class="brand"><span class="tile"><img src="screens/logo_mark.png" alt=""/></span><span class="wm" dir="ltr">MED QR<small>منصة الصحة الرقمية</small></span></div>
+    <span class="chip">البنية الوظيفية</span>
+  </header>
+  <div class="body">
+    <p class="kicker">ثلاثة أدوار · تطبيق واحد</p>
+    <h1>لكل مستخدم واجهته الخاصة وصلاحياته الدقيقة</h1>
+    <p class="lead" style="max-width:225mm;">
+      يتعرّف التطبيق على دور المستخدم عند الدخول، ويعيد بناء الواجهة والقوائم والصلاحيات تلقائياً.
+      لا يرى أحد ما لا يخصّه.
+    </p>
+
+    <div class="grid3" style="margin-top:5mm;">
+      <div class="card">
+        <div class="ico">م</div>
+        <h3>المريض</h3>
+        <p style="color:var(--muted); font-size:10.5px; margin-bottom:2mm;">يملك بياناته ويتحكم بمن يراها</p>
+        <ul>
+          <li>بطاقة <span dir="ltr">QR</span> ومعلومات الطوارئ</li>
+          <li>سجل الزيارات والتشخيصات والملفات</li>
+          <li>خريطة الأطباء والبحث والحجز</li>
+          <li>محادثة الطبيب بعد الزيارة</li>
+          <li>الإشعارات والمنشورات التوعوية</li>
+          <li>الإعدادات وحذف الحساب نهائياً</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="ico">ط</div>
+        <h3>الطبيب</h3>
+        <p style="color:var(--muted); font-size:10.5px; margin-bottom:2mm;">يدير عيادته من هاتفه</p>
+        <ul>
+          <li>لوحة اليوم: مواعيد وحالات</li>
+          <li>مسح <span dir="ltr">QR</span> وفتح ملف المريض</li>
+          <li>تسجيل الزيارة والتشخيص والوصفة</li>
+          <li>قائمة مرضاي وسجلاتهم</li>
+          <li>أوقات التوفر ومناطق العمل</li>
+          <li>إحصائيات العيادة ومنشورات المجتمع</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="ico">إ</div>
+        <h3>الإدارة</h3>
+        <p style="color:var(--muted); font-size:10.5px; margin-bottom:2mm;">تضبط المنظومة وتوثّقها</p>
+        <ul>
+          <li>اعتماد الأطباء والتحقق من الشهادات</li>
+          <li>إدارة المستخدمين والحسابات</li>
+          <li>إدارة المناطق والتخصصات</li>
+          <li>مراجعة المنشورات والبلاغات</li>
+          <li>سجل تدقيق كامل لكل إجراء</li>
+          <li>إحصائيات المنصة العامة</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card solid" style="margin-top:5mm;">
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:8mm;">
+        <div style="max-width:175mm;">
+          <h3>تطبيق واحد بدل ثلاثة</h3>
+          <p style="margin:0;">
+            المريض والطبيب يستخدمان التطبيق نفسه، والفرق في الدور لا في التنزيل. هذا يخفض كلفة النشر والتحديث،
+            ويجعل انضمام طبيب جديد أو مريض جديد لا يتطلب أكثر من رقم هاتف.
+          </p>
+        </div>
+        <div class="pills" style="flex:none;">
+          <span class="pill cyan">قاعدة بيانات واحدة</span>
+          <span class="pill cyan">صلاحيات مفصّلة</span>
+          <span class="pill cyan">واجهة لكل دور</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="foot"><span>MED QR — منصة الصحة الرقمية</span><span class="num">05</span></footer>
+</section>
+
+<!-- ============ 6 · رحلة المريض 1 ============ -->
+<section class="slide">
+  <header class="topbar">
+    <div class="brand"><span class="tile"><img src="screens/logo_mark.png" alt=""/></span><span class="wm" dir="ltr">MED QR<small>منصة الصحة الرقمية</small></span></div>
+    <span class="chip">تجربة المريض · ١</span>
+  </header>
+  <div class="body">
+    <p class="kicker">الدخول والواجهة الرئيسية</p>
+    <h1>من رقم الهاتف إلى لوحة صحية كاملة في أقل من دقيقة</h1>
+
+    <div class="split text-phones" style="margin-top:4mm;">
+      <div>
+        <div class="note">
+          <span class="dot">١</span>
+          <div>
+            <b>دخول بلا كلمة مرور</b>
+            <p>رقم الهاتف فقط، ويصل رمز التحقق عبر <b class="hl">واتساب</b> — القناة الأكثر انتشاراً وموثوقية في العراق. لا بريد إلكتروني ولا كلمات مرور منسية.</p>
+          </div>
+        </div>
+        <div class="note">
+          <span class="dot">٢</span>
+          <div>
+            <b>ترحيب يتغير حسب الوقت</b>
+            <p>«صباح الخير» أو «مساء الخير» مع اسم المستخدم، وزر مختصر للبطاقة الطبية في أعلى الشاشة — تفاصيل صغيرة تجعل التطبيق يبدو شخصياً لا عاماً.</p>
+          </div>
+        </div>
+        <div class="note">
+          <span class="dot">٣</span>
+          <div>
+            <b>لوحة «كل الخدمات»</b>
+            <p>ثماني بوابات واضحة: سجلاتي · رمزي · الخريطة · بحث طبيب · الإشعارات · المجتمع · الرسائل · مواعيدي. كل ما يحتاجه المريض على بُعد لمسة واحدة.</p>
+          </div>
+        </div>
+        <div class="note">
+          <span class="dot">٤</span>
+          <div>
+            <b>شريط سفلي ثابت</b>
+            <p>الرئيسية · الأطباء · <span dir="ltr">QR</span> · الرسائل · المزيد، مع زر المسح البارز في المنتصف. تنقّل لا يحتاج شرحاً أو تدريباً.</p>
+          </div>
+        </div>
+        <div class="callout" style="margin-top:1mm;">
+          الواجهة بالكامل بالعربية ومن اليمين إلى اليسار، بخط واضح وأحجام لمس مريحة — مصمّمة لتُستخدم من الجيل الأكبر سناً أيضاً.
+        </div>
+      </div>
+
+      <div class="phones">
+        <figure class="phone md">
+          <div class="frame"><img src="screens/login.png" alt="الدخول" /></div>
+          <figcaption>الدخول برمز واتساب</figcaption>
+        </figure>
+        <figure class="phone md">
+          <div class="frame"><img src="screens/patient-home.png" alt="رئيسية المريض" /></div>
+          <figcaption>الواجهة الرئيسية للمريض</figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+  <footer class="foot"><span>MED QR — منصة الصحة الرقمية</span><span class="num">06</span></footer>
+</section>
+
+<!-- ============ 7 · رحلة المريض 2 — البطاقة ============ -->
+<section class="slide">
+  <header class="topbar">
+    <div class="brand"><span class="tile"><img src="screens/logo_mark.png" alt=""/></span><span class="wm" dir="ltr">MED QR<small>منصة الصحة الرقمية</small></span></div>
+    <span class="chip">تجربة المريض · ٢</span>
+  </header>
+  <div class="body">
+    <p class="kicker">البطاقة الطبية — قلب المنصة</p>
+    <h1>هوية طبية يحملها المريض في جيبه</h1>
+
+    <div class="split phones-text" style="margin-top:4mm;">
+      <div class="phones">
+        <figure class="phone lg">
+          <div class="frame"><img src="screens/patient-qr.png" alt="البطاقة الطبية" /></div>
+          <figcaption>رمزي الطبي</figcaption>
+        </figure>
+      </div>
+
+      <div>
+        <p class="lead" style="margin-bottom:4mm;">
+          هذه الشاشة هي ما يميّز <span dir="ltr">MED QR</span> عن أي تطبيق حجز مواعيد. إنها بطاقة هوية طبية حيّة:
+          نصفها العلوي لحالات الطوارئ، ونصفها السفلي مفتاح السجل الكامل.
+        </p>
+
+        <div class="grid2" style="margin-bottom:4mm;">
+          <div class="card">
+            <h3>معلومات الطوارئ</h3>
+            <p>الاسم · العمر · فصيلة الدم · جهة الاتصال. تظهر للطبيب لحظة المسح، حتى لو كان المريض فاقداً للوعي أو غير قادر على الكلام.</p>
+          </div>
+          <div class="card">
+            <h3>رمز <span dir="ltr">QR</span> الشخصي</h3>
+            <p>معرّف فريد لكل مريض (مثال: <span dir="ltr">IQ-P-24885</span>). يُعرض على الشاشة أو يُحفظ كصورة، ويعمل بلا اتصال بالإنترنت.</p>
+          </div>
+        </div>
+
+        <div class="card solid">
+          <h3>لماذا هذا مهم</h3>
+          <p style="margin-bottom:2mm;">
+            في العراق، انتقال المريض بين طبيب عام وأخصائي ومستشفى هو القاعدة لا الاستثناء.
+            البطاقة تجعل هذا الانتقال بلا فقدان للمعلومة: كل طبيب جديد يبدأ من حيث انتهى السابق.
+          </p>
+          <div class="pills">
+            <span class="pill cyan">يعمل بلا إنترنت</span>
+            <span class="pill cyan">لا يُشارك إلا بموافقة المريض</span>
+            <span class="pill cyan">قابل للطباعة والحفظ</span>
+          </div>
+        </div>
+
+        <div class="callout" style="margin-top:4mm;">
+          زر «سجلاتي» في أعلى الشاشة ينقل المريض مباشرة إلى الأرشيف الكامل: الزيارات، التشخيصات، الوصفات، ونتائج التحاليل والأشعة المرفوعة.
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="foot"><span>MED QR — منصة الصحة الرقمية</span><span class="num">07</span></footer>
+</section>
+
+<!-- ============ 8 · رحلة المريض 3 — الخريطة والطبيب ============ -->
+<section class="slide">
+  <header class="topbar">
+    <div class="brand"><span class="tile"><img src="screens/logo_mark.png" alt=""/></span><span class="wm" dir="ltr">MED QR<small>منصة الصحة الرقمية</small></span></div>
+    <span class="chip">تجربة المريض · ٣</span>
+  </header>
+  <div class="body">
+    <p class="kicker">اكتشاف الطبيب والحجز</p>
+    <h1>خريطة حيّة للأطباء حسب المنطقة والتخصص</h1>
+
+    <div class="split text-phones" style="margin-top:4mm;">
+      <div>
+        <div class="note">
+          <span class="dot">◉</span>
+          <div>
+            <b>خريطة تفاعلية بصور الأطباء</b>
+            <p>كل طبيب يظهر كعلامة تحمل صورته الحقيقية على موقع عيادته. الضغط على العلامة يفتح بطاقة مختصرة ثم الملف الكامل.</p>
+          </div>
+        </div>
+        <div class="note">
+          <span class="dot">⚲</span>
+          <div>
+            <b>فلترة مزدوجة</b>
+            <p>حسب <b class="hl">المنطقة</b> (المنصور، الكرادة، الأعظمية…) وحسب <b class="hl">التخصص</b> (أمراض القلب، الأطفال، النسائية…). يمكن الجمع بين الفلترين مع البحث النصي.</p>
+          </div>
+        </div>
+        <div class="note">
+          <span class="dot">★</span>
+          <div>
+            <b>ملف الاستشاري</b>
+            <p>الصورة، التخصص، اسم العيادة والمدينة، سنوات الخبرة، التقييم، وأوقات الدوام — كل ما يحتاجه المريض ليقرر، في شاشة واحدة قابلة للمشاركة.</p>
+          </div>
+        </div>
+        <div class="note">
+          <span class="dot">✓</span>
+          <div>
+            <b>حجز بدورة حياة كاملة</b>
+            <p>الطلب يمرّ بحالات واضحة: <span class="pill">مُعلّق</span> <span class="pill">مؤكَّد</span> <span class="pill">مكتمل</span> <span class="pill">ملغى</span> — مع إشعار للمريض عند كل تغيير.</p>
+          </div>
+        </div>
+
+        <div class="card tint" style="margin-top:3mm;">
+          <h3>قيمة مزدوجة</h3>
+          <p>المريض يجد الطبيب الأقرب والأنسب دون وساطة، والطبيب يحصل على حضور رقمي مهني وقناة وصول جديدة لمرضى منطقته.</p>
+        </div>
+      </div>
+
+      <div class="phones">
+        <figure class="phone md">
+          <div class="frame"><img src="screens/map.png" alt="خريطة الأطباء" /></div>
+          <figcaption>خريطة الأطباء بالفلاتر</figcaption>
+        </figure>
+        <figure class="phone md">
+          <div class="frame"><img src="screens/doctor-profile.png" alt="ملف الطبيب" /></div>
+          <figcaption>ملف الاستشاري</figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+  <footer class="foot"><span>MED QR — منصة الصحة الرقمية</span><span class="num">08</span></footer>
+</section>
+
+<!-- ============ 9 · رحلة المريض 4 — مركز الخدمات ============ -->
+<section class="slide">
+  <header class="topbar">
+    <div class="brand"><span class="tile"><img src="screens/logo_mark.png" alt=""/></span><span class="wm" dir="ltr">MED QR<small>منصة الصحة الرقمية</small></span></div>
+    <span class="chip">تجربة المريض · ٤</span>
+  </header>
+  <div class="body">
+    <p class="kicker">مركز الخدمات</p>
+    <h1>كل خدمات المريض منظّمة في أقسام واضحة</h1>
+
+    <div class="split phones-text" style="margin-top:4mm;">
+      <div class="phones">
+        <figure class="phone lg">
+          <div class="frame"><img src="screens/patient-menu.png" alt="قائمة المزيد" /></div>
+          <figcaption>قائمة المزيد — مقسّمة حسب الغرض</figcaption>
+        </figure>
+      </div>
+
+      <div>
+        <p class="lead" style="margin-bottom:4mm;">
+          بدل قائمة طويلة مربكة، قُسّمت الخدمات إلى مجموعات منطقية تعكس نيّة المستخدم: رعايتي، البحث والحجز، التواصل، والحساب.
+        </p>
+
+        <table>
+          <thead><tr><th style="width:26%;">القسم</th><th>ما يحتويه</th></tr></thead>
+          <tbody>
+            <tr><td><b>رعايتي</b></td><td>رمزي الطبي · سجلاتي الطبية (الزيارات والملفات والتشخيصات) · مواعيدي (الطلبات والجدول)</td></tr>
+            <tr><td><b>البحث والحجز</b></td><td>خريطة الأطباء حسب المنطقة · البحث عن طبيب وحجز موعد مع متخصص</td></tr>
+            <tr><td><b>التواصل</b></td><td>الرسائل مع الأطباء · المجتمع الطبي: منشورات توعوية من أطباء معتمدين</td></tr>
+            <tr><td><b>الحساب</b></td><td>الملف الشخصي · الإشعارات · الإعدادات · حذف الحساب وكل بياناته نهائياً</td></tr>
+          </tbody>
+        </table>
+
+        <div class="grid2" style="margin-top:4mm;">
+          <div class="card">
+            <h3>بطاقة الهوية العلوية</h3>
+            <p>الاسم، المعرّف الرسمي <span dir="ltr">IQ-P-24885</span>، ونوع الحساب — تأكيد بصري دائم لهوية المستخدم داخل المنصة.</p>
+          </div>
+          <div class="card">
+            <h3>حق الحذف الكامل</h3>
+            <p>بضغطة واحدة يستطيع المستخدم حذف حسابه وكل سجلاته وملفاته المرفوعة نهائياً — التزام صريح بملكية المريض لبياناته.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="foot"><span>MED QR — منصة الصحة الرقمية</span><span class="num">09</span></footer>
+</section>
+
+<!-- ============ 10 · رحلة الطبيب 1 ============ -->
+<section class="slide">
+  <header class="topbar">
+    <div class="brand"><span class="tile"><img src="screens/logo_mark.png" alt=""/></span><span class="wm" dir="ltr">MED QR<small>منصة الصحة الرقمية</small></span></div>
+    <span class="chip">تجربة الطبيب · ١</span>
+  </header>
+  <div class="body">
+    <p class="kicker">لوحة العيادة</p>
+    <h1>عيادة كاملة تُدار من الهاتف</h1>
+
+    <div class="split text-phones" style="margin-top:4mm;">
+      <div>
+        <p class="lead" style="margin-bottom:4mm;">
+          نفس التطبيق، لكن بواجهة مختلفة تماماً. الطبيب يفتح التطبيق فيرى «عيادتك اليوم» —
+          ملخّص يومه ثم أدواته الثماني، ثم شبكة الأطباء الزملاء.
+        </p>
+
+        <div class="grid2">
+          <div class="card">
+            <h3>المواعيد</h3>
+            <p>طلبات الحجز الواردة مع تأكيد أو رفض، وجدول اليوم مرتباً زمنياً.</p>
+          </div>
+          <div class="card">
+            <h3>مرضاي</h3>
+            <p>كل مريض فُتح ملفه سابقاً، مع وصول سريع إلى سجله وزياراته.</p>
+          </div>
+          <div class="card">
+            <h3>لوحتي</h3>
+            <p>الملف العام للطبيب كما يراه المرضى: النبذة، الخبرة، العيادة، الشهادات.</p>
+          </div>
+          <div class="card">
+            <h3>مسح <span dir="ltr">QR</span></h3>
+            <p>الكاميرا تفتح مباشرة، والمسح ينقل الطبيب إلى ملف المريض في ثانية.</p>
+          </div>
+          <div class="card">
+            <h3>التوفر</h3>
+            <p>أيام وساعات الدوام لكل يوم، تنعكس فوراً على خيارات الحجز المتاحة للمرضى.</p>
+          </div>
+          <div class="card">
+            <h3>المناطق</h3>
+            <p>مناطق عمل الطبيب التي تحدّد ظهوره في خريطة المرضى وفلاتر البحث.</p>
+          </div>
+          <div class="card">
+            <h3>الإحصائيات</h3>
+            <p>عدد المرضى والزيارات والمواعيد، ومؤشرات أداء العيادة عبر الزمن.</p>
+          </div>
+          <div class="card">
+            <h3>المجتمع</h3>
+            <p>نشر محتوى توعوي موثوق يصل لكل المرضى ويبني سمعة الطبيب الرقمية.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="phones">
+        <figure class="phone md">
+          <div class="frame"><img src="screens/doctor-home.png" alt="لوحة الطبيب" /></div>
+          <figcaption>عيادتك اليوم</figcaption>
+        </figure>
+        <figure class="phone md">
+          <div class="frame"><img src="screens/doctor-home-2.png" alt="شبكة الأطباء" /></div>
+          <figcaption>أدوات العيادة وشبكة الأطباء</figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+  <footer class="foot"><span>MED QR — منصة الصحة الرقمية</span><span class="num">10</span></footer>
+</section>
+
+<!-- ============ 11 · رحلة الطبيب 2 — التواصل ============ -->
+<section class="slide">
+  <header class="topbar">
+    <div class="brand"><span class="tile"><img src="screens/logo_mark.png" alt=""/></span><span class="wm" dir="ltr">MED QR<small>منصة الصحة الرقمية</small></span></div>
+    <span class="chip">تجربة الطبيب · ٢</span>
+  </header>
+  <div class="body">
+    <p class="kicker">التواصل بعد الزيارة</p>
+    <h1>قناة محادثة محكومة بعلاقة طبية حقيقية</h1>
+
+    <div class="split text-phones" style="margin-top:4mm;">
+      <div>
+        <p class="lead" style="margin-bottom:4mm;">
+          المحادثة في <span dir="ltr">MED QR</span> ليست دردشة مفتوحة. الطبيب لا يستطيع مراسلة إلا المرضى
+          <b class="hl">الذين فتح سجلاتهم أو زارهم فعلاً</b> — وهذا يمنع الإزعاج ويحافظ على الطابع المهني للمنصة.
+        </p>
+
+        <div class="grid2" style="margin-bottom:4mm;">
+          <div class="card">
+            <h3>من جهة الطبيب</h3>
+            <p>«تواصل مع مرضاك» — قائمة المحادثات مع عدّاد الرسائل غير المقروءة وزر بدء محادثة جديدة من قائمة المرضى المصرَّح بهم.</p>
+          </div>
+          <div class="card">
+            <h3>من جهة المريض</h3>
+            <p>«تواصل مع أطبائك» — استفسار بعد الزيارة أو متابعة نتيجة تحليل، دون الحاجة لمراجعة العيادة مرة أخرى.</p>
+          </div>
+        </div>
+
+        <table>
+          <thead><tr><th style="width:38%;">الميزة</th><th>الأثر العملي</th></tr></thead>
+          <tbody>
+            <tr><td><b>محادثة مرتبطة بالسجل</b></td><td>السياق الطبي حاضر دائماً، لا رسائل مجهولة السياق</td></tr>
+            <tr><td><b>إشعارات فورية</b></td><td>لا رسالة تضيع، ولا انتظار على الهاتف</td></tr>
+            <tr><td><b>حالة القراءة</b></td><td>وضوح متبادل بين الطرفين حول وصول الرسالة</td></tr>
+            <tr><td><b>حالات فارغة موجّهة</b></td><td>رسوم وإرشادات تشرح للمستخدم الجديد ماذا يفعل</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="phones">
+        <figure class="phone md">
+          <div class="frame"><img src="screens/doctor-messages.png" alt="محادثات الطبيب" /></div>
+          <figcaption>محادثات الطبيب مع مرضاه</figcaption>
+        </figure>
+        <figure class="phone md">
+          <div class="frame"><img src="screens/patient-messages.png" alt="محادثات المريض" /></div>
+          <figcaption>محادثات المريض مع أطبائه</figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+  <footer class="foot"><span>MED QR — منصة الصحة الرقمية</span><span class="num">11</span></footer>
+</section>
+
+<!-- ============ 12 · الأمان ============ -->
+<section class="slide dark">
+  <header class="topbar">
+    <div class="brand"><span class="tile"><img src="screens/logo_mark.png" alt=""/></span><span class="wm" dir="ltr">MED QR<small>منصة الصحة الرقمية</small></span></div>
+    <span class="chip">الأمان والخصوصية</span>
+  </header>
+  <div class="body">
+    <p class="kicker">النموذج الأمني</p>
+    <h1>البيانات الطبية ملك المريض — والوصول إليها مؤقّت وموثّق</h1>
+    <p class="lead" style="max-width:225mm;">
+      النظام كله قائم على قاعدة واحدة: لا أحد يصل إلى سجل مريض دون فعل صريح من المريض نفسه،
+      وكل وصول يُسجَّل ولا يمكن محوه.
+    </p>
+
+    <div class="grid4" style="margin:5mm 0;">
+      <div class="card">
+        <div class="ico">⏱</div>
+        <h3>جلسة محدودة</h3>
+        <p>مسح الرمز يفتح جلسة اطّلاع لمدة محدّدة، مع نافذة تعديل قصيرة لتسجيل الزيارة ثم تُغلق تلقائياً.</p>
+      </div>
+      <div class="card">
+        <div class="ico">🔑</div>
+        <h3>مصادقة قوية</h3>
+        <p>دخول برمز واتساب لمرة واحدة، ورموز وصول <span dir="ltr">JWT</span> موقّعة لكل طلب على الخادم.</p>
+      </div>
+      <div class="card">
+        <div class="ico">▤</div>
+        <h3>سجل تدقيق</h3>
+        <p>كل عملية — فتح ملف، تعديل، حذف، إجراء إداري — تُوثَّق مع المستخدم والدور والوقت والجهاز.</p>
+      </div>
+      <div class="card">
+        <div class="ico">⊘</div>
+        <h3>حق النسيان</h3>
+        <p>حذف الحساب يمسح السجلات والملفات المرفوعة نهائياً من قاعدة البيانات ومن الخادم معاً.</p>
+      </div>
+    </div>
+
+    <table style="background:rgba(255,255,255,.07); border-color:rgba(255,255,255,.18);">
+      <thead><tr>
+        <th style="background:rgba(255,255,255,.13); color:#fff; width:22%;">من</th>
+        <th style="background:rgba(255,255,255,.13); color:#fff;">ماذا يرى</th>
+        <th style="background:rgba(255,255,255,.13); color:#fff; width:26%;">شرط الوصول</th>
+      </tr></thead>
+      <tbody style="color:#D3E7F0;">
+        <tr><td style="border-bottom-color:rgba(255,255,255,.14);"><b style="color:#fff;">المريض</b></td><td style="border-bottom-color:rgba(255,255,255,.14);">سجله الكامل، مواعيده، ملفاته، ومن اطّلع عليه</td><td style="border-bottom-color:rgba(255,255,255,.14);">دائم — إنه صاحب البيانات</td></tr>
+        <tr><td style="border-bottom-color:rgba(255,255,255,.14);"><b style="color:#fff;">الطبيب</b></td><td style="border-bottom-color:rgba(255,255,255,.14);">ملف المريض الذي مسح رمزه أو حجز عنده</td><td style="border-bottom-color:rgba(255,255,255,.14);">مسح <span dir="ltr">QR</span> أو موعد مؤكَّد</td></tr>
+        <tr><td style="border-bottom-color:rgba(255,255,255,.14);"><b style="color:#fff;">الإدارة</b></td><td style="border-bottom-color:rgba(255,255,255,.14);">الحسابات والتصنيفات والسجلات التشغيلية</td><td style="border-bottom-color:rgba(255,255,255,.14);">صلاحية إدارية مسجَّلة بالكامل</td></tr>
+        <tr><td><b style="color:#fff;">أي طرف آخر</b></td><td>لا شيء</td><td>لا يوجد وصول</td></tr>
+      </tbody>
+    </table>
+
+    <div class="grid3" style="margin-top:5mm;">
+      <div class="card">
+        <h3>لا مشاركة صامتة</h3>
+        <p style="margin:0;">لا تُنقل بيانات أي مريض إلى طرف ثالث. البيانات تبقى داخل المنصة، والوصول إليها يمرّ عبر فعل صريح من صاحبها.</p>
+      </div>
+      <div class="card">
+        <h3>فصل الأدوار على مستوى الخادم</h3>
+        <p style="margin:0;">الصلاحية تُفحص في كل طلب على الخادم لا في الواجهة فقط، فلا يمكن تجاوزها بتعديل التطبيق.</p>
+      </div>
+      <div class="card">
+        <h3>أساس جاهز للامتثال</h3>
+        <p style="margin:0;">سجل التدقيق وحق الحذف وفصل الصلاحيات هي متطلبات أساسية في أي إطار تنظيمي صحي مستقبلي.</p>
+      </div>
+    </div>
+  </div>
+  <footer class="foot"><span>MED QR — منصة الصحة الرقمية</span><span class="num">12</span></footer>
+</section>
+
+<!-- ============ 13 · لوحة الإدارة ============ -->
+<section class="slide">
+  <header class="topbar">
+    <div class="brand"><span class="tile"><img src="screens/logo_mark.png" alt=""/></span><span class="wm" dir="ltr">MED QR<small>منصة الصحة الرقمية</small></span></div>
+    <span class="chip">لوحة الإدارة</span>
+  </header>
+  <div class="body">
+    <p class="kicker">مركز التحكم</p>
+    <h1>لوحة إدارة مستقلة تحكم المنصة وتضمن جودتها</h1>
+    <p class="lead" style="max-width:225mm;">
+      تطبيق ويب منفصل بستّ عشرة شاشة، مخصّص لفريق التشغيل. لا يُبنى مع تطبيق المستخدمين ولا يُوزَّع معه —
+      فصل كامل بين طبقة الاستخدام وطبقة الإدارة.
+    </p>
+
+    <div class="grid3" style="margin-top:5mm;">
+      <div class="card">
+        <h2>ضبط الجودة</h2>
+        <ul>
+          <li><b>اعتماد الأطباء:</b> مراجعة الشهادات والتخصص قبل ظهور الطبيب للمرضى</li>
+          <li><b>مراجعة المحتوى:</b> اعتماد أو رفض منشورات المجتمع الطبي</li>
+          <li><b>البلاغات:</b> معالجة شكاوى المستخدمين وإجراءات الإيقاف</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h2>إدارة المنظومة</h2>
+        <ul>
+          <li><b>المستخدمون:</b> بحث، تعديل، تعليق أو حذف الحسابات</li>
+          <li><b>المناطق:</b> إضافة مناطق ومدن جديدة مع إحداثياتها على الخريطة</li>
+          <li><b>التخصصات:</b> قائمة التخصصات الطبية المعتمدة في المنصة</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h2>الرقابة والقياس</h2>
+        <ul>
+          <li><b>سجل التدقيق:</b> كل إجراء بالاسم والدور والوقت ونوع العملية</li>
+          <li><b>الإحصائيات:</b> نمو المستخدمين والأطباء والزيارات والمواعيد</li>
+          <li><b>الإشعارات:</b> إرسال تنبيهات وإعلانات لشرائح محددة</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:5mm;">
+      هذا الفصل يجعل المنصة <b class="hl">قابلة للتوسّع مؤسسياً</b>: يمكن تشغيلها لمستشفى واحد، أو لشبكة عيادات، أو على مستوى مدينة كاملة، دون تغيير في البنية.
+    </div>
+
+    <div class="card solid" style="margin-top:5mm;">
+      <h3>لماذا وجود لوحة إدارة يصنع الفرق</h3>
+      <div class="grid3" style="gap:5mm; margin-top:3mm;">
+        <div>
+          <b style="color:#8FD6EF; font-size:11.8px;">ثقة المرضى</b>
+          <p style="font-size:11.3px; margin:1mm 0 0;">لا يظهر طبيب في المنصة قبل التحقق من شهادته وتخصصه — الجودة مضمونة من الباب.</p>
+        </div>
+        <div>
+          <b style="color:#8FD6EF; font-size:11.8px;">تشغيل مُدار</b>
+          <p style="font-size:11.3px; margin:1mm 0 0;">المنصة ليست تطبيقاً متروكاً للمستخدمين، بل خدمة يقف خلفها فريق يراقبها ويطوّرها.</p>
+        </div>
+        <div>
+          <b style="color:#8FD6EF; font-size:11.8px;">قابلية المحاسبة</b>
+          <p style="font-size:11.3px; margin:1mm 0 0;">أي سؤال عن «من فعل ماذا ومتى» له جواب موثّق في سجل التدقيق.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="foot"><span>MED QR — منصة الصحة الرقمية</span><span class="num">13</span></footer>
+</section>
+
+<!-- ============ 14 · التقنية ============ -->
+<section class="slide">
+  <header class="topbar">
+    <div class="brand"><span class="tile"><img src="screens/logo_mark.png" alt=""/></span><span class="wm" dir="ltr">MED QR<small>منصة الصحة الرقمية</small></span></div>
+    <span class="chip">البنية التقنية</span>
+  </header>
+  <div class="body">
+    <p class="kicker">تحت الغطاء</p>
+    <h1>بنية حديثة مبنية للتوسّع من اليوم الأول</h1>
+
+    <div class="grid3" style="margin:4mm 0 5mm;">
+      <div class="card">
+        <div class="ico">◧</div>
+        <h3>التطبيقات</h3>
+        <p><b>Flutter</b> بقاعدة كود واحدة تُنتج تطبيق أندرويد ونسخة ويب. واجهة عربية <span dir="ltr">RTL</span> كاملة وتصميم متجاوب من الهاتف إلى سطح المكتب.</p>
+      </div>
+      <div class="card">
+        <div class="ico">◩</div>
+        <h3>الخادم</h3>
+        <p><b>Node.js + Express</b> مع ٥٦ واجهة برمجية مؤمَّنة، ومصادقة <span dir="ltr">JWT</span>، ورفع ملفات منظّم وحدود واضحة للأحجام والأنواع.</p>
+      </div>
+      <div class="card">
+        <div class="ico">◨</div>
+        <h3>قاعدة البيانات</h3>
+        <p><b>PostgreSQL</b> بـ ٢٢ جدولاً مترابطاً، مع عمليات معاملاتية <span dir="ltr">(transactions)</span> تضمن سلامة البيانات عند كل تعديل أو حذف.</p>
+      </div>
+    </div>
+
+    <div class="grid2" style="flex:1;">
+      <div class="card">
+        <h2>خدمات ومزايا مدمجة</h2>
+        <ul>
+          <li><b>رموز التحقق عبر واتساب</b> — تكامل مباشر مع مزوّد رسائل، دون اعتماد على البريد الإلكتروني</li>
+          <li><b>خرائط تفاعلية</b> — عرض الأطباء بعلامات مخصصة تحمل صورهم الشخصية</li>
+          <li><b>توليد وقراءة رموز <span dir="ltr">QR</span></b> — إنشاء داخل التطبيق ومسح عبر الكاميرا</li>
+          <li><b>إدارة ملفات طبية</b> — صور وتقارير وتحاليل بحدود حجم ونوع مضبوطة</li>
+          <li><b>نظام إشعارات</b> — تنبيهات داخل التطبيق لكل حدث مهم</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h2>جاهزية التشغيل</h2>
+        <ul>
+          <li><b>يعمل على خادم مباشر</b> — النظام منشور وقيد التشغيل الفعلي، لا نموذج أوّلي</li>
+          <li><b>نشر آلي</b> — سكربتات نشر وتحديث تختصر الإصدار الجديد إلى دقائق</li>
+          <li><b>تكوين بيئي مرن</b> — الأسرار والمفاتيح خارج الكود بالكامل</li>
+          <li><b>قابلية التوسّع</b> — إضافة مناطق ومدن وتخصصات دون تعديل برمجي</li>
+          <li><b>سجل تدقيق مركزي</b> — أساس جاهز لأي متطلبات امتثال مستقبلية</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card solid" style="margin-top:5mm;">
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:8mm;">
+        <p style="margin:0; max-width:165mm;">
+          الاختيارات التقنية لم تكن عشوائية: قاعدة كود واحدة تخفض كلفة التطوير والصيانة إلى النصف تقريباً،
+          وقاعدة بيانات علائقية تحمي سلامة السجل الطبي، وبنية خدمات تسمح بإضافة تكاملات جديدة دون المساس بما يعمل اليوم.
+        </p>
+        <div class="pills" style="flex:none; max-width:82mm; justify-content:flex-end;">
+          <span class="pill cyan">Flutter</span>
+          <span class="pill cyan">Node.js</span>
+          <span class="pill cyan">PostgreSQL</span>
+          <span class="pill cyan">JWT</span>
+          <span class="pill cyan">WhatsApp OTP</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="foot"><span>MED QR — منصة الصحة الرقمية</span><span class="num">14</span></footer>
+</section>
+
+<!-- ============ 15 · الجاهز والقادم ============ -->
+<section class="slide">
+  <header class="topbar">
+    <div class="brand"><span class="tile"><img src="screens/logo_mark.png" alt=""/></span><span class="wm" dir="ltr">MED QR<small>منصة الصحة الرقمية</small></span></div>
+    <span class="chip">الحالة والمسار</span>
+  </header>
+  <div class="body">
+    <p class="kicker">أين نحن الآن</p>
+    <h1>منتج مكتمل يعمل اليوم — ومسار واضح لما بعده</h1>
+
+    <div class="grid2" style="margin-top:4mm; gap:6mm;">
+      <div class="card">
+        <h2>جاهز ويعمل</h2>
+        <ul>
+          <li>تسجيل ودخول بالهاتف عبر رمز واتساب لجميع الأدوار</li>
+          <li>بطاقة <span dir="ltr">QR</span> للمريض مع معلومات الطوارئ</li>
+          <li>مسح الرمز وفتح ملف المريض من تطبيق الطبيب</li>
+          <li>تسجيل الزيارات والتشخيصات ورفع الملفات الطبية</li>
+          <li>خريطة الأطباء بالمناطق والتخصصات والبحث</li>
+          <li>حجز المواعيد بدورة حياة كاملة وإشعارات</li>
+          <li>المحادثات بين المريض وطبيبه</li>
+          <li>المجتمع الطبي والمنشورات التوعوية</li>
+          <li>لوحة إدارة كاملة مع سجل تدقيق</li>
+          <li>الإعدادات وحذف الحساب والبيانات نهائياً</li>
+        </ul>
+      </div>
+      <div class="card tint">
+        <h2>المسار التالي</h2>
+        <ul>
+          <li><b>التوسّع الجغرافي:</b> تفعيل مناطق ومحافظات إضافية عبر لوحة الإدارة فقط</li>
+          <li><b>تطبيق <span dir="ltr">iOS</span>:</b> إصدار من نفس قاعدة الكود دون إعادة بناء</li>
+          <li><b>الوصفة الرقمية:</b> ربط الصيدليات بالوصفات الصادرة من الأطباء</li>
+          <li><b>تكامل المختبرات:</b> استقبال نتائج التحاليل آلياً في سجل المريض</li>
+          <li><b>لوحات تحليلية:</b> مؤشرات صحية مجمّعة ومجهولة الهوية لصنّاع القرار</li>
+          <li><b>الاستشارة عن بُعد:</b> بناء على قناة المحادثة القائمة</li>
+        </ul>
+        <div class="callout" style="margin-top:3mm;">
+          كل هذه الإضافات تُبنى فوق البنية الحالية دون إعادة تصميم — القاعدة موجودة بالفعل.
+        </div>
+      </div>
+    </div>
+
+    <div class="grid4" style="margin-top:5mm;">
+      <div class="card">
+        <h3>أطباء</h3>
+        <p style="margin:0;">انضمام الطبيب لا يتطلب أجهزة أو تدريباً — هاتفه وحساب معتمد يكفيان لتشغيل عيادته رقمياً.</p>
+      </div>
+      <div class="card">
+        <h3>عيادات ومراكز</h3>
+        <p style="margin:0;">يمكن تشغيل المنصة لمركز واحد أو لشبكة عيادات، بنفس البنية ودون تخصيص برمجي.</p>
+      </div>
+      <div class="card">
+        <h3>مستشفيات</h3>
+        <p style="margin:0;">بطاقة المريض تعمل كنقطة دخول موحّدة إلى تاريخه، وتربط الأقسام بسجل واحد.</p>
+      </div>
+      <div class="card">
+        <h3>مبادرات صحية</h3>
+        <p style="margin:0;">حملات التوعية والفحص المبكر تصل إلى المستخدمين مباشرة عبر المجتمع الطبي والإشعارات.</p>
+      </div>
+    </div>
+  </div>
+  <footer class="foot"><span>MED QR — منصة الصحة الرقمية</span><span class="num">15</span></footer>
+</section>
+
+<!-- ============ 16 · الخلاصة ============ -->
+<section class="slide dark">
+  <header class="topbar">
+    <div class="brand"><span class="tile"><img src="screens/logo_mark.png" alt=""/></span><span class="wm" dir="ltr">MED QR<small>منصة الصحة الرقمية</small></span></div>
+    <span class="chip">الخلاصة</span>
+  </header>
+  <div class="body">
+    <div class="split text-phones" style="margin-top:2mm; align-items:center;">
+      <div style="display:flex; flex-direction:column; justify-content:center;">
+        <div style="width:20mm; height:20mm; background:#fff; border-radius:5.5mm; display:flex; align-items:center; justify-content:center; box-shadow:0 8px 24px rgba(0,0,0,.3); margin-bottom:6mm;">
+          <img src="screens/logo_mark.png" alt="" style="width:15mm; height:15mm; object-fit:contain;" />
+        </div>
+        <h1 style="font-size:31px;">رمز واحد… وسجل طبي يرافق الإنسان مدى الحياة</h1>
+        <p class="lead" style="max-width:150mm; margin-bottom:5mm;">
+          <span dir="ltr">MED QR</span> يحوّل الرعاية الصحية من زيارات منفصلة إلى رحلة متصلة.
+          المريض يملك بياناته ويتنقّل بها بأمان، والطبيب يبدأ كل زيارة بمعلومة كاملة،
+          والمنظومة كلها تُدار وتُقاس من مكان واحد.
+        </p>
+
+        <div class="grid3" style="gap:4mm; margin-bottom:6mm;">
+          <div class="card"><h3>للمريض</h3><p>أمان واستمرارية وسيطرة كاملة على ملفه الطبي.</p></div>
+          <div class="card"><h3>للطبيب</h3><p>وقت أقل في الإدارة، وقرار أدق، وحضور رقمي مهني.</p></div>
+          <div class="card"><h3>للمنظومة</h3><p>بيانات صحية منظّمة قابلة للقياس وأساس للتحوّل الرقمي.</p></div>
+        </div>
+
+        <div class="pills">
+          <span class="pill">جاهز للتشغيل</span>
+          <span class="pill">مصمَّم للعراق</span>
+          <span class="pill">قابل للتوسّع</span>
+          <span class="pill">عربي بالكامل</span>
+        </div>
+      </div>
+
+      <div class="phones">
+        <figure class="phone lg">
+          <div class="frame"><img src="screens/patient-home.png" alt="" /></div>
+        </figure>
+      </div>
+    </div>
+  </div>
+  <footer class="foot"><span>MED QR — منصة الصحة الرقمية</span><span class="num">16</span></footer>
+</section>
+
+</body>
+</html>

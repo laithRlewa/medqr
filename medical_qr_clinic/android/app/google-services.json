@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "796628489837",
+    "project_id": "medqr-990bc",
+    "storage_bucket": "medqr-990bc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:796628489837:android:31e2cd852a4fded768d164",
+        "android_client_info": {
+          "package_name": "iq.medical.medical_qr_clinic"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjdetccFW6J1nzkPMOFmLJejKXpfFCol8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
