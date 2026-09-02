@@ -1,7 +1,7 @@
 name: medical_qr_clinic
 description: تطبيق المريض والطبيب — الرمز الطبي العراقي
 publish_to: 'none'
-version: 1.0.0+1
+version: 1.0.1+2
 
 environment:
   sdk: ^3.10.7
@@ -44,7 +44,8 @@ dev_dependencies:
 flutter_launcher_icons:
   image_path: assets/brand/app_icon.png
   android: true
-  ios: false
+  ios: true
+  remove_alpha_ios: true
   min_sdk_android: 21
   adaptive_icon_background: "#FFFFFF"
   adaptive_icon_foreground: assets/brand/app_icon_foreground.png
@@ -70,7 +71,7 @@ flutter_native_splash:
   branding_mode: bottom
   branding_bottom_padding: 48
   android: true
-  ios: false
+  ios: true
   web: false
   android_12:
     image: assets/brand/splash_android12.png

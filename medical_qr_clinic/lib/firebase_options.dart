@@ -23,10 +23,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -61,9 +58,18 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBjdetccFW6J1nzkPMOFmLJejKXpfFCol8',
-    appId: '1:796628489837:android:31e2cd852a4fded768d164',
+    appId: '1:796628489837:android:9af09c4738d34bec68d164',
     messagingSenderId: '796628489837',
     projectId: 'medqr-990bc',
     storageBucket: 'medqr-990bc.firebasestorage.app',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyBQTONc2w67btqZfmlQLg-jU4bE5KTcYb8',
+    appId: '1:796628489837:ios:04157f785debbdf768d164',
+    messagingSenderId: '796628489837',
+    projectId: 'medqr-990bc',
+    storageBucket: 'medqr-990bc.firebasestorage.app',
+    iosBundleId: 'iq.medical.medicalqrclinic',
   );
 }

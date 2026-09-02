@@ -1,4 +1,4 @@
-package iq.medical.medical_qr_clinic
+package iq.medical.medicalqrclinic
 
 import io.flutter.embedding.android.FlutterActivity
 
