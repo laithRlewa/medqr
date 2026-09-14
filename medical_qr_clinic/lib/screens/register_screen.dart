@@ -2,12 +2,13 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 
 import '../data/labels.dart';
+import '../legal/legal_urls.dart';
 import '../state/clinic_store.dart';
 import '../theme/clinic_style.dart';
+import '../widgets/media.dart';
 import '../widgets/mobile_kit.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -68,7 +69,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Future<void> _pickPhoto() async {
-    final file = await ImagePicker().pickImage(source: ImageSource.gallery, imageQuality: 85);
+    final file = await pickGalleryImage();
     if (file != null) setState(() => photoPath = file.path);
   }
 
@@ -722,27 +723,48 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final next = _isDoctor && doctorStep == 0;
     return Padding(
       padding: const EdgeInsets.only(top: 8),
-      child: Row(
+      child: Column(
         children: [
-          Expanded(
-            child: GhostButton(
-              label: _isDoctor && doctorStep > 0 ? 'رجوع' : 'تغيير الدور',
-              onTap: _back,
-            ),
+          Row(
+            children: [
+              Expanded(
+                child: GhostButton(
+                  label: _isDoctor && doctorStep > 0 ? 'رجوع' : 'تغيير الدور',
+                  onTap: _back,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                flex: 2,
+                child: OrangeButton(
+                  label: busy
+                      ? 'جارٍ الإرسال...'
+                      : next
+                          ? 'التالي: التفصيل المهني'
+                          : _isDoctor
+                              ? 'تقديم للموافقة'
+                              : 'إرسال رمز واتساب',
+                  onTap: busy ? null : (next ? _goToDetail : _submit),
+                ),
+              ),
+            ],
           ),
-          const SizedBox(width: 12),
-          Expanded(
-            flex: 2,
-            child: OrangeButton(
-              label: busy
-                  ? 'جارٍ الإرسال...'
-                  : next
-                      ? 'التالي: التفصيل المهني'
-                      : _isDoctor
-                          ? 'تقديم للموافقة'
-                          : 'إرسال رمز واتساب',
-              onTap: busy ? null : (next ? _goToDetail : _submit),
-            ),
+          const SizedBox(height: 10),
+          Wrap(
+            alignment: WrapAlignment.center,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              Text('بإنشاء الحساب توافق على ', style: TextStyle(fontSize: 12, color: ClinicColors.muted.withValues(alpha: 0.95))),
+              GestureDetector(
+                onTap: LegalUrls.openPrivacy,
+                child: const Text('سياسة الخصوصية', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: ClinicColors.primary, decoration: TextDecoration.underline)),
+              ),
+              const Text(' و', style: TextStyle(fontSize: 12, color: ClinicColors.muted)),
+              GestureDetector(
+                onTap: LegalUrls.openAccountDeletion,
+                child: const Text('حق حذف الحساب', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: ClinicColors.primary, decoration: TextDecoration.underline)),
+              ),
+            ],
           ),
         ],
       ),

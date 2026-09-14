@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../legal/legal_urls.dart';
 import '../state/clinic_store.dart';
 import '../theme/clinic_style.dart';
 import '../widgets/brand_logo.dart';
@@ -130,6 +131,8 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                     icon: const Icon(Icons.person_add_alt_1_outlined, size: 20),
                     label: const Text('إنشاء حساب جديد'),
                   ),
+                  const SizedBox(height: 18),
+                  const _LegalLinks(),
                 ],
               ),
             ),
@@ -237,6 +240,29 @@ class _TrustNote extends StatelessWidget {
             'الرمز صالح لدقائق ولا يُستخدم إلا مرة واحدة',
             style: TextStyle(fontSize: 12, color: ClinicColors.muted),
           ),
+        ),
+      ],
+    );
+  }
+}
+
+class _LegalLinks extends StatelessWidget {
+  const _LegalLinks();
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      alignment: WrapAlignment.center,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: [
+        TextButton(
+          onPressed: LegalUrls.openPrivacy,
+          child: const Text('سياسة الخصوصية', style: TextStyle(fontSize: 12.5)),
+        ),
+        Text('·', style: TextStyle(color: ClinicColors.muted.withValues(alpha: 0.8))),
+        TextButton(
+          onPressed: LegalUrls.openAccountDeletion,
+          child: const Text('حذف الحساب', style: TextStyle(fontSize: 12.5)),
         ),
       ],
     );

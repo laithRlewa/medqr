@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../api/api_client.dart';
 import '../api/mappers.dart';
@@ -65,6 +68,8 @@ class ClinicStore extends ChangeNotifier {
   late List<MapRegion> regions;
   final likedPostIds = <String>{};
   String? selectedRegionId;
+  static const _tokenKey = 'medqr.auth.token';
+  static const _userKey = 'medqr.auth.user';
 
   String get role => currentUser?.role ?? '';
   bool get isPatient => role == 'patient';
@@ -599,6 +604,85 @@ class ClinicStore extends ChangeNotifier {
     }
   }
 
+  Future<void> restoreSession() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString(_tokenKey);
+    if (token == null || token.isEmpty) return;
+    api.token = token;
+    try {
+      currentUser = _userFromMap(asMap(jsonDecode(prefs.getString(_userKey) ?? '{}')));
+    } catch (_) {}
+    try {
+      await _renewToken();
+    } catch (_) {}
+    try {
+      await refresh();
+      if (currentUser != null) {
+        await _saveSession();
+        await PushService.instance.onLoggedIn();
+      }
+    } catch (error) {
+      if (error is ApiException && error.isUnauthorized && currentUser == null) {
+        api.token = null;
+        await _clearSavedSession();
+      }
+    }
+  }
+
+  Future<void> _renewToken() async {
+    final data = await api.post('/api/auth/refresh');
+    final token = asString(data['token']);
+    if (token.isEmpty) return;
+    api.token = token;
+    final user = _userFromMap(asMap(data['user']));
+    if (user != null) currentUser = user;
+  }
+
+  Future<void> _saveSession() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = api.token;
+    if (token != null && token.isNotEmpty) {
+      await prefs.setString(_tokenKey, token);
+    }
+    final user = currentUser;
+    if (user != null) {
+      await prefs.setString(_userKey, jsonEncode(_userToMap(user)));
+    }
+  }
+
+  Future<void> _clearSavedSession() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_tokenKey);
+    await prefs.remove(_userKey);
+  }
+
+  Map<String, dynamic> _userToMap(ClinicUser user) => {
+        'id': user.id,
+        'email': user.email,
+        'fullName': user.fullName,
+        'role': user.role,
+        'phone': user.phone,
+        'profilePhoto': user.profilePhoto,
+        'notifyEmail': user.notifyEmail,
+        'notifySms': user.notifySms,
+        'notifyPush': user.notifyPush,
+      };
+
+  ClinicUser? _userFromMap(Map<String, dynamic> user) {
+    if (user.isEmpty || asString(user['id']).isEmpty) return null;
+    return ClinicUser(
+      id: asString(user['id']),
+      email: asString(user['email']),
+      fullName: asString(user['fullName']),
+      role: asString(user['role']),
+      phone: asString(user['phone']),
+      profilePhoto: asString(user['profilePhoto']),
+      notifyEmail: asBool(user['notifyEmail'], true),
+      notifySms: asBool(user['notifySms'], true),
+      notifyPush: asBool(user['notifyPush'], true),
+    );
+  }
+
   void logout() {
     PushService.instance.onLoggedOut();
     currentUser = null;
@@ -611,6 +695,7 @@ class ClinicStore extends ChangeNotifier {
     selectedDoctorId = null;
     authError = null;
     likedPostIds.clear();
+    _clearSavedSession();
     notifyListeners();
   }
 
@@ -625,6 +710,7 @@ class ClinicStore extends ChangeNotifier {
       throw ApiException('تعذر إكمال تسجيل الدخول');
     }
     await refresh();
+    await _saveSession();
     final photoPath = pendingProfilePhotoPath;
     pendingProfilePhotoPath = null;
     if (photoPath != null && photoPath.isNotEmpty) {
@@ -1195,20 +1281,7 @@ class ClinicStore extends ChangeNotifier {
       '${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
 
   void applyBootstrap(Map<String, dynamic> data) {
-    final user = asMap(data['user']);
-    if (user.isNotEmpty) {
-      currentUser = ClinicUser(
-        id: asString(user['id']),
-        email: asString(user['email']),
-        fullName: asString(user['fullName']),
-        role: asString(user['role']),
-        phone: asString(user['phone']),
-        profilePhoto: asString(user['profilePhoto']),
-        notifyEmail: asBool(user['notifyEmail'], true),
-        notifySms: asBool(user['notifySms'], true),
-        notifyPush: asBool(user['notifyPush'], true),
-      );
-    }
+    currentUser = _userFromMap(asMap(data['user'])) ?? currentUser;
     final settings = asMap(data['branding']);
     if (settings.isNotEmpty) {
       branding

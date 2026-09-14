@@ -18,10 +18,25 @@ import '../state/clinic_store.dart';
 import 'clinic_icon.dart';
 import 'ui.dart';
 
+/// يفتح أداة اختيار الصور النظامية دون صلاحية معرض كاملة.
+Future<XFile?> pickGalleryImage({int imageQuality = 85, double? maxWidth}) {
+  return ImagePicker().pickImage(
+    source: ImageSource.gallery,
+    imageQuality: imageQuality,
+    maxWidth: maxWidth,
+    requestFullMetadata: false,
+  );
+}
+
 Future<String?> pickAndUpload(ClinicStore store, {bool imagesOnly = false}) async {
+  if (imagesOnly) {
+    final file = await pickGalleryImage();
+    if (file == null) return null;
+    return store.uploadPath(file.path);
+  }
   final result = await FilePicker.platform.pickFiles(
-    type: imagesOnly ? FileType.image : FileType.custom,
-    allowedExtensions: imagesOnly ? null : ['jpg', 'jpeg', 'png', 'pdf', 'webp', 'doc', 'docx'],
+    type: FileType.custom,
+    allowedExtensions: ['pdf', 'doc', 'docx'],
     withData: false,
   );
   final path = result?.files.single.path;
@@ -30,25 +45,22 @@ Future<String?> pickAndUpload(ClinicStore store, {bool imagesOnly = false}) asyn
 }
 
 Future<List<String>> pickAndUploadMany(ClinicStore store) async {
-  final result = await FilePicker.platform.pickFiles(
-    allowMultiple: true,
-    type: FileType.custom,
-    allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf', 'webp'],
+  final files = await ImagePicker().pickMultiImage(
+    imageQuality: 85,
+    requestFullMetadata: false,
   );
-  if (result == null) return [];
   final urls = <String>[];
-  for (final file in result.files) {
-    final path = file.path;
-    if (path == null) continue;
-    final url = await store.uploadPath(path);
+  for (final file in files) {
+    final url = await store.uploadPath(file.path);
     if (url != null && url.isNotEmpty) urls.add(url);
   }
   return urls;
 }
 
 Future<String?> pickImageAndUpload(ClinicStore store, {bool camera = false}) async {
-  final picker = ImagePicker();
-  final file = await picker.pickImage(source: camera ? ImageSource.camera : ImageSource.gallery, imageQuality: 85);
+  final file = camera
+      ? await ImagePicker().pickImage(source: ImageSource.camera, imageQuality: 85)
+      : await pickGalleryImage();
   if (file == null) return null;
   return store.uploadPath(file.path);
 }
@@ -91,12 +103,9 @@ Future<String?> decodeQrFromPath(String path) async {
 }
 
 Future<String?> scanQrFromDevice({bool camera = false}) async {
-  final picker = ImagePicker();
-  final file = await picker.pickImage(
-    source: camera ? ImageSource.camera : ImageSource.gallery,
-    imageQuality: 95,
-    maxWidth: 2000,
-  );
+  final file = camera
+      ? await ImagePicker().pickImage(source: ImageSource.camera, imageQuality: 95, maxWidth: 2000)
+      : await pickGalleryImage(imageQuality: 95, maxWidth: 2000);
   if (file == null) return null;
   return decodeQrFromPath(file.path);
 }

@@ -7,6 +7,7 @@ const { seedIfEmpty, seedRegionsIfEmpty, id } = require('./seed');
 const { toIqIntl, toIqLocal, isIqMobile, phoneLookupValues, sendWhatsappOtp } = require('./otpiq');
 const { registerFeatures, extraBootstrap } = require('./features');
 const { initFirebaseAdmin, sendPushToUser } = require('./push');
+const { registerLegal } = require('./legal');
 
 const app = express();
 const PORT = Number(process.env.PORT || 8080);
@@ -20,7 +21,7 @@ function nid(prefix) {
 }
 
 function sign(user) {
-  return jwt.sign({ id: user.id, email: user.email, role: user.role, fullName: user.full_name }, JWT_SECRET, { expiresIn: '7d' });
+  return jwt.sign({ id: user.id, email: user.email, role: user.role, fullName: user.full_name }, JWT_SECRET);
 }
 
 function auth(req, res, next) {
@@ -353,6 +354,21 @@ app.post('/api/auth/password/reset', async (req, res) => {
   const { rowCount } = await query('UPDATE users SET password_hash=$1 WHERE LOWER(email)=$2', [bcrypt.hashSync(password, 10), email]);
   if (!rowCount) return res.status(400).json({ error: 'الحساب غير موجود' });
   res.json({ ok: true });
+});
+
+app.post('/api/auth/refresh', async (req, res) => {
+  const header = req.headers.authorization || '';
+  const token = header.startsWith('Bearer ') ? header.slice(7) : String(req.body?.token || '');
+  if (!token) return res.status(401).json({ error: 'يجب تسجيل الدخول' });
+  let payload;
+  try {
+    payload = jwt.verify(token, JWT_SECRET, { ignoreExpiration: true });
+  } catch {
+    return res.status(401).json({ error: 'انتهت الجلسة' });
+  }
+  const user = (await query('SELECT * FROM users WHERE id=$1', [payload.id])).rows[0];
+  if (!user) return res.status(401).json({ error: 'الحساب غير موجود' });
+  return res.json({ token: sign(user), user: publicUser(user) });
 });
 
 app.get('/api/me', auth, async (req, res) => {
@@ -1102,6 +1118,8 @@ function mapRegion(r) {
     createdDate: iso(r.created_at),
   };
 }
+
+registerLegal(app, { query, nid, notifyAdmins, audit, isIqMobile });
 
 registerFeatures({
   app,

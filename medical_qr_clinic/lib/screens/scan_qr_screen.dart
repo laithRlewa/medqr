@@ -141,7 +141,7 @@ class _ScanQrScreenState extends State<ScanQrScreen> {
       _error = null;
     });
     try {
-      final file = await ImagePicker().pickImage(source: ImageSource.gallery, imageQuality: 95, maxWidth: 2000);
+      final file = await pickGalleryImage(imageQuality: 95, maxWidth: 2000);
       if (file == null) {
         if (mounted) setState(() => _handling = false);
         return;

@@ -6,8 +6,10 @@ import 'package:http/http.dart' as http;
 import 'api_config.dart';
 
 class ApiException implements Exception {
-  ApiException(this.message);
+  ApiException(this.message, [this.statusCode = 0]);
   final String message;
+  final int statusCode;
+  bool get isUnauthorized => statusCode == 401;
   @override
   String toString() => message;
 }
@@ -64,7 +66,7 @@ class ApiClient {
     final raw = res.body.isEmpty ? <String, dynamic>{} : jsonDecode(res.body);
     final map = raw is Map<String, dynamic> ? raw : <String, dynamic>{'data': raw};
     if (res.statusCode >= 400) {
-      throw ApiException(map['error']?.toString() ?? 'فشل الاتصال بالخادم (${res.statusCode})');
+      throw ApiException(map['error']?.toString() ?? 'فشل الاتصال بالخادم (${res.statusCode})', res.statusCode);
     }
     return map;
   }

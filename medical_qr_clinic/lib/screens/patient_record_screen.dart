@@ -457,7 +457,7 @@ class _PatientRecordScreenState extends State<PatientRecordScreen> {
                         onPressed: uploading
                             ? null
                             : () async {
-                                final picked = await ImagePicker().pickImage(source: ImageSource.gallery, imageQuality: 88);
+                                final picked = await pickGalleryImage(imageQuality: 88);
                                 if (picked != null) await attachPath(picked.path, setLocal);
                               },
                         icon: const Icon(Icons.photo_library_outlined),
@@ -493,7 +493,7 @@ class _PatientRecordScreenState extends State<PatientRecordScreen> {
                             : () async {
                                 final result = await FilePicker.platform.pickFiles(
                                   type: FileType.custom,
-                                  allowedExtensions: const ['jpg', 'jpeg', 'png', 'webp', 'pdf'],
+                                  allowedExtensions: const ['pdf', 'doc', 'docx'],
                                 );
                                 final path = result?.files.single.path;
                                 if (path != null) await attachPath(path, setLocal);

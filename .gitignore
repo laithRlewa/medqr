@@ -38,6 +38,7 @@ Thumbs.db
 **/*.apk
 **/*.aab
 **/*.ipa
+**/dist/*.zip
 app.*.symbols
 app.*.map.json
 

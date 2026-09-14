@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>سياسة الخصوصية — MED QR | Privacy Policy</title>
+  <meta name="description" content="سياسة خصوصية منصة الرمز الطبي MED QR، وتشمل جمع البيانات الصحية وحذف الحساب نهائياً." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #062a3b;
+      --deep: #0a3b52;
+      --primary: #14738f;
+      --cyan: #23a3cb;
+      --tint: #e1f0f7;
+      --bg: #f6fbfd;
+      --card: #fff;
+      --line: #d5e7ef;
+      --muted: #587886;
+      --danger: #b42318;
+      --danger-bg: #fff5f5;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); font-family: "Tajawal", "Segoe UI", Tahoma, sans-serif; }
+    body { line-height: 1.75; }
+    a { color: var(--primary); font-weight: 700; }
+    header {
+      background: linear-gradient(135deg, var(--deep), var(--primary));
+      color: #fff;
+      padding: 28px 20px 36px;
+    }
+    .wrap { max-width: 880px; margin: 0 auto; }
+    .brand { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .logo { font-weight: 900; letter-spacing: .14em; font-size: 22px; }
+    .logo small { display: block; letter-spacing: 0; font-size: 12px; font-weight: 700; opacity: .85; }
+    .lang { display: flex; gap: 8px; }
+    .lang button {
+      border: 0; border-radius: 999px; padding: 8px 14px; font-weight: 800; cursor: pointer;
+      background: rgba(255,255,255,.16); color: #fff; font-family: inherit;
+    }
+    .lang button.active { background: #fff; color: var(--deep); }
+    header h1 { margin: 22px 0 8px; font-size: 30px; }
+    header p { margin: 0; opacity: .92; max-width: 640px; }
+    .meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+    .chip { background: rgba(255,255,255,.14); border-radius: 999px; padding: 5px 12px; font-size: 12px; font-weight: 800; }
+    nav.toc {
+      background: var(--card); border: 1px solid var(--line); border-radius: 18px;
+      padding: 18px 20px; margin: -22px auto 22px; max-width: 880px; position: relative;
+    }
+    nav.toc h2 { margin: 0 0 10px; font-size: 15px; color: var(--primary); }
+    nav.toc ol { margin: 0; padding-inline-start: 20px; }
+    nav.toc li { margin: 4px 0; }
+    main { padding: 8px 20px 64px; }
+    article section {
+      background: var(--card); border: 1px solid var(--line); border-radius: 18px;
+      padding: 22px 22px 8px; margin: 0 auto 16px; max-width: 880px;
+    }
+    h2 { margin: 0 0 10px; font-size: 20px; color: var(--deep); }
+    h3 { margin: 18px 0 8px; font-size: 16px; color: var(--primary); }
+    p, li { color: #204254; }
+    ul, ol { padding-inline-start: 20px; }
+    .danger {
+      background: var(--danger-bg); border-color: #f2c2c0;
+    }
+    .danger h2 { color: var(--danger); }
+    .steps { counter-reset: step; list-style: none; padding: 0; }
+    .steps li {
+      counter-increment: step; background: #f3fafd; border-radius: 12px; padding: 12px 14px 12px 14px;
+      margin: 8px 0; position: relative;
+    }
+    table { width: 100%; border-collapse: collapse; margin: 10px 0 16px; font-size: 14px; }
+    th, td { border: 1px solid var(--line); padding: 9px 10px; text-align: start; vertical-align: top; }
+    th { background: var(--tint); color: var(--deep); }
+    footer { padding: 24px 20px 40px; color: var(--muted); font-size: 13px; }
+    .hidden { display: none !important; }
+    .en { font-family: "Segoe UI", Tahoma, sans-serif; }
+    [dir="ltr"] nav.toc ol, [dir="ltr"] ul, [dir="ltr"] ol { padding-inline-start: 20px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="brand">
+        <div class="logo">MED QR<small>الرمز الطبي — سياسة الخصوصية</small></div>
+        <div class="lang">
+          <button type="button" id="btn-ar" class="active" onclick="setLang('ar')">العربية</button>
+          <button type="button" id="btn-en" onclick="setLang('en')">English</button>
+        </div>
+      </div>
+      <h1 data-ar="سياسة الخصوصية" data-en="Privacy Policy">سياسة الخصوصية</h1>
+      <p data-ar="توضح هذه السياسة كيف تجمع منصة MED QR (الرمز الطبي) بياناتك الشخصية والصحية، وكيف نستخدمها، ومع من نشاركها، وكيف يمكنك حذف حسابك وكل بياناتك نهائياً." data-en="This policy explains how MED QR collects, uses, and shares your personal and health data, and how you can permanently delete your account and all related information."></p>
+      <div class="meta">
+        <span class="chip">آخر تحديث: 2 أيلول / سبتمبر 2026</span>
+        <span class="chip">الإصدار 1.0.1</span>
+        <span class="chip">iq.medical.medicalqrclinic</span>
+      </div>
+    </div>
+  </header>
+
+  <nav class="toc wrap">
+    <h2 data-ar="المحتويات" data-en="Contents">المحتويات</h2>
+    <ol>
+      <li><a href="#who" data-ar="من نحن ونطاق السياسة" data-en="Who we are and scope">من نحن ونطاق السياسة</a></li>
+      <li><a href="#collect" data-ar="البيانات التي نجمعها" data-en="Data we collect">البيانات التي نجمعها</a></li>
+      <li><a href="#use" data-ar="كيف نستخدم البيانات" data-en="How we use data">كيف نستخدم البيانات</a></li>
+      <li><a href="#share" data-ar="المشاركة والأطراف الثالثة" data-en="Sharing and processors">المشاركة والأطراف الثالثة</a></li>
+      <li><a href="#qr" data-ar="رمز QR والوصول الطبي" data-en="QR access">رمز QR والوصول الطبي</a></li>
+      <li><a href="#retention" data-ar="الاحتفاظ والأمان" data-en="Retention and security">الاحتفاظ والأمان</a></li>
+      <li><a href="#rights" data-ar="حقوقك" data-en="Your rights">حقوقك</a></li>
+      <li><a href="#delete" data-ar="حذف الحساب" data-en="Account deletion">حذف الحساب</a></li>
+      <li><a href="#children" data-ar="الأطفال والتغييرات" data-en="Children and changes">الأطفال والتغييرات</a></li>
+      <li><a href="#contact" data-ar="التواصل" data-en="Contact">التواصل</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <article>
+      <section id="who">
+        <h2 data-ar="1. من نحن ونطاق هذه السياسة" data-en="1. Who we are and scope">1. من نحن ونطاق هذه السياسة</h2>
+        <p data-ar="مشغّل الخدمة هو منصة MED QR «الرمز الطبي»، خدمة صحة رقمية مقرّ عملها بغداد — جمهورية العراق. نقدّم سجلاً طبياً واحداً يفتحه المريض عبر رمز QR للطبيب المعتمد." data-en="The service is operated by MED QR (“الرمز الطبي”), a digital-health platform based in Baghdad, Republic of Iraq. We provide one medical record that a patient can open for an authorized doctor by QR scan."></p>
+        <p data-ar="تسري هذه السياسة على:" data-en="This policy applies to:"></p>
+        <ul>
+          <li data-ar="تطبيق المريض والطبيب على أندرويد وiOS والويب (معرّف المتجر: iq.medical.medicalqrclinic)." data-en="The patient and doctor app on Android, iOS, and web (store ID: iq.medical.medicalqrclinic)."></li>
+          <li data-ar="لوحة الإدارة المستخدمة لتشغيل المنصة." data-en="The admin dashboard used to operate the platform."></li>
+          <li data-ar="واجهة البرمجة والخادم الذي يستضيف الحسابات والملفات الطبية." data-en="The API and server that host accounts and medical files."></li>
+        </ul>
+        <p data-ar="باستخدامك التطبيق أو إنشاء حساب فإنك تقرّ بأنك قرأت هذه السياسة. إن لم توافق، يرجى عدم استخدام الخدمة وحذف الحساب إن كان قد أُنشئ." data-en="By using the app or creating an account you acknowledge this policy. If you do not agree, do not use the service and delete any account you already created."></p>
+      </section>
+
+      <section id="collect">
+        <h2 data-ar="2. البيانات التي نجمعها" data-en="2. Data we collect">2. البيانات التي نجمعها</h2>
+        <h3 data-ar="بيانات الحساب" data-en="Account data">بيانات الحساب</h3>
+        <p data-ar="الاسم الكامل، رقم الهاتف العراقي، البريد الإلكتروني إن أدخلته، الدور (مريض أو طبيب)، صورة الملف الشخصي، تفضيلات اللغة والإشعارات، وتاريخ إنشاء الحساب." data-en="Full name, Iraqi mobile number, optional email, role (patient or doctor), profile photo, language and notification preferences, and account creation date."></p>
+        <h3 data-ar="بيانات صحية (فئة خاصة)" data-en="Health data (special category)">بيانات صحية (فئة خاصة)</h3>
+        <p data-ar="للمرضى قد يشمل ذلك: المدينة، الجنس، فصيلة الدم، تاريخ الميلاد، الرقم الوطني إن أُدخل، الحساسية، الأمراض المزمنة، الأدوية الحالية، التاريخ الطبي، اللقاحات، العمليات، جهة اتصال الطوارئ، الزيارات، الأعراض، التشخيص، خطة العلاج، الأدوية الموصوفة، وملاحظات المتابعة." data-en="For patients this may include city, sex, blood type, date of birth, national ID if provided, allergies, chronic conditions, current medications, medical history, vaccinations, surgeries, emergency contact, visits, symptoms, diagnosis, treatment plan, prescribed medicines, and follow-up notes."></p>
+        <h3 data-ar="ملفات ومستندات" data-en="Files and documents">ملفات ومستندات</h3>
+        <p data-ar="صور وتحاليل وتقارير وشهادات يرفعها المريض أو الطبيب (حتى 15 ميغابايت للملف). تُخزَّن على خادمنا." data-en="Photos, lab results, reports, and certificates uploaded by the patient or doctor (up to 15 MB per file). Files are stored on our server."></p>
+        <h3 data-ar="بيانات الطبيب والاشتراك" data-en="Doctor and billing data">بيانات الطبيب والاشتراك</h3>
+        <p data-ar="التخصص، اسم العيادة، رقم الترخيص، المؤهلات، السيرة، سنوات الخبرة، ساعات العمل، أوقات التوفر، مناطق الخريطة، المنشورات، التقييمات، وبيانات بطاقة الدفع إن أدخلها الطبيب لتفعيل الاشتراك." data-en="Specialty, clinic name, license number, qualifications, biography, experience, working hours, availability, map regions, posts, reviews, and payment-card details if a doctor submits them to activate a subscription."></p>
+        <h3 data-ar="التحقق والتواصل" data-en="Verification and communications">التحقق والتواصل</h3>
+        <p data-ar="نرسل رمز تحقق لمرة واحدة عبر واتساب إلى رقمك. نحتفظ بالرمز لمدة قصيرة حتى يُستخدم أو ينتهي. كذلك نحتفظ بالرسائل داخل التطبيق والإشعارات." data-en="We send a one-time verification code to your number via WhatsApp. The code is kept only until it is used or expires. We also store in-app messages and notifications."></p>
+        <h3 data-ar="بيانات الجهاز والتقنية" data-en="Device and technical data">بيانات الجهاز والتقنية</h3>
+        <ul>
+          <li data-ar="رمز جهاز لإشعارات Firebase Cloud Messaging إن فعّلت إشعارات الجهاز." data-en="A device token for Firebase Cloud Messaging if you enable push notifications."></li>
+          <li data-ar="عنوان IP ومعلومات جهاز مختصرة في سجلات التدقيق عند بعض العمليات الأمنية." data-en="IP address and brief device information in audit logs for some security events."></li>
+          <li data-ar="الكاميرا ومعرض الصور تُستخدمان محلياً لمسح QR ورفع الصور، ولا نصل إليهما إلا بعد إذنك." data-en="Camera and photo library are used locally to scan QR codes and upload images, only after you grant permission."></li>
+        </ul>
+      </section>
+
+      <section id="use">
+        <h2 data-ar="3. كيف نستخدم البيانات" data-en="3. How we use data">3. كيف نستخدم البيانات</h2>
+        <ul>
+          <li data-ar="إنشاء حسابك والتحقق من رقم الهاتف عبر واتساب." data-en="Creating your account and verifying your phone number via WhatsApp."></li>
+          <li data-ar="حفظ السجل الطبي وعرضه لك وللطبيب بعد مسح رمز QR أو جلسة وصول مصرّح بها." data-en="Storing the medical record and showing it to you and to a doctor after a QR scan or an authorized access session."></li>
+          <li data-ar="حجز المواعيد، الرسائل، المتابعة، المنشورات الطبية، والتقييمات." data-en="Appointments, messaging, follow-up, medical posts, and reviews."></li>
+          <li data-ar="إرسال إشعارات الجهاز أو واتساب أو البريد حسب تفضيلاتك في الإعدادات." data-en="Sending device, WhatsApp, or email notices according to your settings."></li>
+          <li data-ar="مراجعة حسابات الأطباء واعتمادها أو تعليقها من الإدارة، وتشغيل الاشتراك." data-en="Admin review of doctor accounts, approval or suspension, and subscription operation."></li>
+          <li data-ar="حماية الخدمة من إساءة الاستخدام ومنع الوصول غير المصرّح به." data-en="Protecting the service from abuse and unauthorized access."></li>
+          <li data-ar="الامتثال للطلبات القانونية الصادرة عن جهة مختصة في العراق عندما يكون ذلك واجباً." data-en="Complying with lawful requests from competent authorities in Iraq when required."></li>
+        </ul>
+        <p data-ar="لا نبيع بياناتك الشخصية أو الصحية، ولا نستخدم السجل الطبي للإعلانات." data-en="We do not sell your personal or health data, and we do not use the medical record for advertising."></p>
+      </section>
+
+      <section id="share">
+        <h2 data-ar="4. المشاركة والأطراف الثالثة" data-en="4. Sharing and processors">4. المشاركة والأطراف الثالثة</h2>
+        <table>
+          <thead>
+            <tr>
+              <th data-ar="الطرف" data-en="Party">الطرف</th>
+              <th data-ar="السبب" data-en="Purpose">السبب</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-ar="الطبيب المعتمد بعد مسح QR أو جلسة وصول" data-en="An authorized doctor after QR scan or access session">الطبيب المعتمد بعد مسح QR أو جلسة وصول</td>
+              <td data-ar="قراءة السجل وكتابة الزيارة أو رفع ملف خلال المهلة المحددة" data-en="Reading the record and writing a visit or file during the allowed window">قراءة السجل وكتابة الزيارة أو رفع ملف خلال المهلة المحددة</td>
+            </tr>
+            <tr>
+              <td>OTPIQ / WhatsApp</td>
+              <td data-ar="إيصال رمز التحقق والتنبيهات إن فعّلت رسائل واتساب" data-en="Delivering verification codes and alerts if WhatsApp notices are enabled">إيصال رمز التحقق والتنبيهات إن فعّلت رسائل واتساب</td>
+            </tr>
+            <tr>
+              <td>Google Firebase (FCM)</td>
+              <td data-ar="إشعارات الجهاز. نرسل رمز الجهاز ومعرّف التطبيق، وليس ملفك الطبي الكامل" data-en="Device push notifications. We send a device token and app IDs, not your full medical file">إشعارات الجهاز. نرسل رمز الجهاز ومعرّف التطبيق، وليس ملفك الطبي الكامل</td>
+            </tr>
+            <tr>
+              <td data-ar="مشغّلو الخادم والاستضافة" data-en="Hosting / server operators">مشغّلو الخادم والاستضافة</td>
+              <td data-ar="تشغيل قاعدة البيانات والملفات والنسخ الاحتياطي التشغيلي" data-en="Running the database, file storage, and operational backups">تشغيل قاعدة البيانات والملفات والنسخ الاحتياطي التشغيلي</td>
+            </tr>
+            <tr>
+              <td data-ar="إدارة المنصة" data-en="Platform administrators">إدارة المنصة</td>
+              <td data-ar="الدعم، اعتماد الأطباء، التحقيق في إساءة الاستخدام، وتنفيذ طلب حذف إن تعذّر من التطبيق" data-en="Support, doctor approval, abuse investigation, and fulfilling a deletion request if in-app deletion is unavailable">الدعم، اعتماد الأطباء، التحقيق في إساءة الاستخدام، وتنفيذ طلب حذف إن تعذّر من التطبيق</td>
+            </tr>
+          </tbody>
+        </table>
+        <p data-ar="قد تنتقل بعض بيانات التشغيل (مثل إشعار الجهاز أو رسالة واتساب) عبر خوادم خارج العراق لدى هؤلاء المعالجين. نقتصر على ما يلزم لتقديم الخدمة." data-en="Some operational data (such as a push token or WhatsApp message) may be processed on servers outside Iraq by these processors. We limit this to what is needed to provide the service."></p>
+      </section>
+
+      <section id="qr">
+        <h2 data-ar="5. رمز QR والوصول الطبي" data-en="5. QR access">5. رمز QR والوصول الطبي</h2>
+        <p data-ar="رمز QR هو مفتاح وصول إلى سجلك، وليس مجرد صورة. لا تشاركه علناً ولا تسمح بتصويره إلا للطبيب الذي تريد فتح الملف له." data-en="Your QR code is an access key to your record, not just an image. Do not share it publicly or allow it to be photographed except for the doctor you want to open the file."></p>
+        <ul>
+          <li data-ar="بعد المسح تُنشأ جلسة وصول مؤقتة." data-en="A temporary access session is created after a scan."></li>
+          <li data-ar="كتابة تشخيص أو رفع مستند متاحة لمدة عشر دقائق بعد المسح، ثم يلزم مسح جديد." data-en="Writing a diagnosis or uploading a file is allowed for ten minutes after the scan; a new scan is then required."></li>
+          <li data-ar="يُسجَّل أن طبيباً اطّلع على الملف، وتُرسل لك إشعاراً بذلك." data-en="Doctor access is logged, and you receive a notification."></li>
+        </ul>
+      </section>
+
+      <section id="retention">
+        <h2 data-ar="6. الاحتفاظ والأمان" data-en="6. Retention and security">6. الاحتفاظ والأمان</h2>
+        <p data-ar="نحتفظ ببيانات الحساب والسجل الطبي طالما حسابك نشط. رموز التحقق تُحذف بعد الاستخدام أو انتهاء صلاحيتها. جلسات QR تنتهي تلقائياً. رموز إشعارات الجهاز تُحذف عند تسجيل الخروج أو إيقاف الإشعار أو حذف الحساب." data-en="We keep account and medical-record data while your account is active. OTP codes are removed after use or expiry. QR sessions expire automatically. Device push tokens are removed on logout, when you disable push, or when the account is deleted."></p>
+        <p data-ar="نحمي البيانات بتسجيل دخول برمز مؤقت، وصلاحيات حسب الدور، وتشفير كلمة المرور إن وُجدت، وتقييد تعديل السجل بجلسة QR حديثة. لا توجد وسيلة أمنية تقضي على كل المخاطر؛ أبلغنا فور أي استخدام غير معتاد لحسابك." data-en="We protect data with one-time login codes, role-based access, hashed passwords where used, and a fresh QR session for record edits. No measure removes all risk; tell us immediately if you see unusual account activity."></p>
+        <p data-ar="بعد الحذف النهائي قد تبقى نسخ احتياطية تشغيلية لفترة قصيرة لا تتجاوز 30 يوماً ثم تُزال في دورة النسخ التالية، ولا تُستخدم لإعادة إنشاء الحساب." data-en="After permanent deletion, operational backups may retain residual copies for up to 30 days and are then purged in the next backup cycle. They are not used to recreate the account."></p>
+      </section>
+
+      <section id="rights">
+        <h2 data-ar="7. حقوقك" data-en="7. Your rights">7. حقوقك</h2>
+        <ul>
+          <li data-ar="الوصول إلى بيانات ملفك من داخل التطبيق." data-en="Access your profile data in the app."></li>
+          <li data-ar="تصحيح الاسم والهاتف والصورة والبيانات الطبية أو المهنية." data-en="Correct your name, phone, photo, and medical or professional details."></li>
+          <li data-ar="إيقاف حساب المريض مؤقتاً من الملف الشخصي (تعليق وليس حذفاً)." data-en="Temporarily deactivate a patient account from the profile (suspension, not deletion)."> </li>
+          <li data-ar="التحكم بإشعارات الجهاز وواتساب والبريد من الإعدادات." data-en="Control device, WhatsApp, and email notifications in Settings."></li>
+          <li data-ar="حذف الحساب وكل البيانات المرتبطة به نهائياً كما هو موضّح أدناه." data-en="Permanently delete the account and all linked data as described below."></li>
+        </ul>
+      </section>
+
+      <section id="delete" class="danger">
+        <h2 data-ar="8. حذف الحساب — مطلوب لمتاجر التطبيقات" data-en="8. Account deletion">8. حذف الحساب</h2>
+        <p data-ar="يمكنك حذف حسابك بنفسك من التطبيق دون الرجوع إلى الدعم. الحذف نهائي ولا يمكن التراجع عنه." data-en="You can delete your account yourself in the app without contacting support. Deletion is permanent and cannot be undone."></p>
+        <h3 data-ar="من داخل التطبيق (الطريقة الأساسية)" data-en="In the app (primary method)">من داخل التطبيق (الطريقة الأساسية)</h3>
+        <ol class="steps">
+          <li data-ar="افتح التطبيق وسجّل الدخول برقم هاتفك." data-en="Open the app and sign in with your phone number."></li>
+          <li data-ar="من القائمة اختر «الإعدادات»." data-en="Open the menu and tap Settings."></li>
+          <li data-ar="في «منطقة الخطر» اضغط «حذف حسابي وكل بياناتي»." data-en="Under Danger zone, tap Delete my account and all my data."></li>
+          <li data-ar="اكتب كلمة «حذف» ثم أكّد. يُمسح الحساب فوراً وتُنهى الجلسة." data-en="Type the confirmation word and confirm. The account is removed immediately and you are signed out."></li>
+        </ol>
+        <p><a href="account-deletion.html" data-ar="صفحة حذف الحساب وطلب الحذف عبر الويب ←" data-en="Account deletion page and web request →">صفحة حذف الحساب وطلب الحذف عبر الويب ←</a></p>
+        <h3 data-ar="ما الذي يُحذف فوراً" data-en="What is deleted immediately">ما الذي يُحذف فوراً</h3>
+        <ul>
+          <li data-ar="حساب المستخدم وجلسات الدخول ورموز التحقق ورموز إشعارات الجهاز." data-en="The user account, login sessions, OTP codes, and device push tokens."></li>
+          <li data-ar="للمريض: السجل الطبي، رمز QR، الزيارات، الملفات المرفوعة من الخادم، المواعيد، الرسائل، التقييمات، المتابعات، وجلسات وصول الأطباء." data-en="For a patient: medical record, QR code, visits, uploaded files on the server, appointments, messages, reviews, follows, and doctor access sessions."></li>
+          <li data-ar="للطبيب: الملف المهني، الشهادات، المنشورات وصورها، الإنجازات، الرسائل، المواعيد، الزيارات التي أنشأها، الملفات التي رفعها، أوقات التوفر، مناطق الارتباط، وبيانات بطاقة الدفع المخزّنة للاشتراك." data-en="For a doctor: professional profile, certificates, posts and their images, achievements, messages, appointments, visits they created, files they uploaded, availability, map links, and stored subscription card details."></li>
+          <li data-ar="الإشعارات وسجلات التدقيق المرتبطة بمعرّف حسابك." data-en="Notifications and audit records tied to your user ID."></li>
+        </ul>
+        <h3 data-ar="ما الذي قد يبقى" data-en="What may remain">ما الذي قد يبقى</h3>
+        <ul>
+          <li data-ar="أثر تدقيق مجهّل يقول إن «حساباً محذوفاً» أُزيل، من دون اسمك أو هاتفك أو سجلك الطبي." data-en="An anonymized audit note that a deleted account was removed, without your name, phone, or medical record."></li>
+          <li data-ar="محتوى كتبه طرف آخر عنك بعد حذف بياناتك منه (مثل رسالة قديمة عند الطرف الثاني إن بقيت في نسخة محلية على جهازه)." data-en="Content written by someone else after your identifiers are removed, or a copy that remains only on another person’s device."></li>
+          <li data-ar="نسخ احتياطية تشغيلية حتى 30 يوماً كما ورد أعلاه." data-en="Operational backups for up to 30 days as stated above."></li>
+          <li data-ar="بيانات قد يُلزم القانون بالاحتفاظ بها إن صدر أمر مختص؛ هذا استثناء وليس سلوكاً اعتيادياً." data-en="Data we are legally required to keep if a competent order is issued; this is an exception, not the default."></li>
+        </ul>
+        <h3 data-ar="إن تعذّر فتح التطبيق" data-en="If you cannot open the app">إن تعذّر فتح التطبيق</h3>
+        <p data-ar="استخدم صفحة حذف الحساب وأرسل طلباً برقم الهاتف المسجّل. تتحقق الإدارة من الهوية ثم تنفّذ الحذف يدوياً. لا نحذف حساباً بطلب من طرف ثالث من دون تحقق." data-en="Use the account-deletion page and submit a request with the registered phone number. Admins verify identity and then delete the account. We do not delete an account on a third-party request without verification."></p>
+        <p data-ar="حسابات الإدارة لا تُحذف من هذا المسار وتُدار من لوحة التحكم فقط." data-en="Admin accounts cannot be deleted through this path and are managed only from the control panel."></p>
+      </section>
+
+      <section id="children">
+        <h2 data-ar="9. الأطفال والتغييرات" data-en="9. Children and changes">9. الأطفال والتغييرات</h2>
+        <p data-ar="الخدمة موجّهة لمن بلغوا 18 عاماً. لا نطلب إنشاء حساب لطفل. إن عُلم بحساب يعود لقاصر من دون ولي أمر، نحذفه عند التبليغ." data-en="The service is intended for people aged 18 or older. We do not ask a child to create an account. If we learn of an unsupervised minor account, we delete it when notified."></p>
+        <p data-ar="قد نحدّث هذه السياسة عند تغيّر الخدمة أو القانون. نضع تاريخ «آخر تحديث» أعلى الصفحة. استمرار الاستخدام بعد التحديث يعني الاطلاع على النسخة الجديدة. عند تغيير جوهري نحاول التنبيه داخل التطبيق." data-en="We may update this policy when the service or the law changes. The “Last updated” date appears at the top. Continued use after an update means you have had the chance to review the new version. For a material change we will try to notify you in the app."></p>
+      </section>
+
+      <section id="contact">
+        <h2 data-ar="10. التواصل" data-en="10. Contact">10. التواصل</h2>
+        <p data-ar="لأسئلة الخصوصية أو تنفيذ حق الحذف:" data-en="For privacy questions or to exercise deletion:"></p>
+        <ul>
+          <li data-ar="من التطبيق: الإعدادات ← حذف الحساب." data-en="In the app: Settings → Delete account."></li>
+          <li><a href="account-deletion.html" data-ar="طلب حذف عبر الويب" data-en="Web deletion request">طلب حذف عبر الويب</a></li>
+          <li data-ar="المنصة: MED QR — الرمز الطبي، بغداد، العراق." data-en="Operator: MED QR — الرمز الطبي, Baghdad, Iraq."></li>
+          <li data-ar="معرّف التطبيق للمتاجر: iq.medical.medicalqrclinic" data-en="Store application ID: iq.medical.medicalqrclinic"></li>
+        </ul>
+      </section>
+    </article>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>© 2026 MED QR — الرمز الطبي</span>
+      ·
+      <a href="account-deletion.html">Account deletion</a>
+    </div>
+  </footer>
+
+  <script>
+    const dict = {
+      ar: { dir: "rtl", lang: "ar" },
+      en: { dir: "ltr", lang: "en" },
+    };
+    function setLang(code) {
+      const meta = dict[code];
+      document.documentElement.lang = meta.lang;
+      document.documentElement.dir = meta.dir;
+      document.body.classList.toggle("en", code === "en");
+      document.getElementById("btn-ar").classList.toggle("active", code === "ar");
+      document.getElementById("btn-en").classList.toggle("active", code === "en");
+      document.querySelectorAll("[data-ar]").forEach((el) => {
+        el.textContent = el.getAttribute("data-" + code);
+      });
+      try { localStorage.setItem("medqr-lang", code); } catch (_) {}
+    }
+    setLang(localStorage.getItem("medqr-lang") === "en" ? "en" : "ar");
+  </script>
+</body>
+</html>

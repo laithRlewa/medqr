@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../legal/legal_urls.dart';
 import '../state/clinic_store.dart';
 import '../widgets/mobile_kit.dart';
 import '../widgets/ui.dart';
@@ -105,6 +106,19 @@ class SettingsScreen extends StatelessWidget {
           title: 'تسجيل الخروج',
           subtitle: 'إنهاء الجلسة على هذا الجهاز',
           onTap: store.logout,
+        ),
+        const _SectionLabel('القانونية'),
+        _Tile(
+          icon: Icons.policy_outlined,
+          title: 'سياسة الخصوصية',
+          subtitle: 'البيانات الصحية، المشاركة، وحقوقك',
+          onTap: LegalUrls.openPrivacy,
+        ),
+        _Tile(
+          icon: Icons.person_off_outlined,
+          title: 'طريقة حذف الحساب',
+          subtitle: 'من التطبيق أو بطلب عبر الويب',
+          onTap: LegalUrls.openAccountDeletion,
         ),
         const _SectionLabel('منطقة الخطر'),
         const _DeleteAccountCard(),
@@ -225,7 +239,14 @@ class _DeleteAccountCardState extends State<_DeleteAccountCard> {
             'لا يمكن التراجع عن هذا الإجراء.',
             style: TextStyle(color: _danger, fontSize: 12.5, fontWeight: FontWeight.w800),
           ),
-          const SizedBox(height: 14),
+          Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: TextButton(
+              onPressed: LegalUrls.openAccountDeletion,
+              child: const Text('اقرأ تفاصيل الحذف في سياسة الخصوصية'),
+            ),
+          ),
+          const SizedBox(height: 6),
           SizedBox(
             width: double.infinity,
             child: OutlinedButton.icon(

@@ -20,6 +20,7 @@ Future<void> main() async {
   };
   push.isLoggedIn = () => store.loggedIn;
   await PushService.instance.bootstrap();
+  await store.restoreSession();
   runApp(ClinicScope(store: store, child: const MedicalQrClinicApp()));
 }
 

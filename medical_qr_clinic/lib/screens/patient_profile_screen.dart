@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
 import '../state/clinic_store.dart';
+import '../widgets/media.dart';
 import '../widgets/mobile_kit.dart';
 import '../widgets/ui.dart';
 
@@ -117,7 +117,7 @@ class _PatientProfileScreenState extends State<PatientProfileScreen> {
   }
 
   Future<void> _pickPhoto(ClinicStore store) async {
-    final file = await ImagePicker().pickImage(source: ImageSource.gallery, imageQuality: 85, maxWidth: 1200);
+    final file = await pickGalleryImage(maxWidth: 1200);
     if (file == null) return;
     final url = await store.uploadPath(file.path);
     if (url == null || url.isEmpty) {
