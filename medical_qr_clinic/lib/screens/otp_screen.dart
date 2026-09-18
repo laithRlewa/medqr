@@ -82,21 +82,11 @@ class _OtpScreenState extends State<OtpScreen> {
                   const SizedBox(height: 8),
                   Text('أرسلنا رمز تحقق برسالة نصية إلى ${challenge.email}', textAlign: TextAlign.center, style: const TextStyle(color: ClinicColors.muted)),
                   const SizedBox(height: 16),
-                  // لا يعيد السيرفر رمزاً إلا في وضع التجريب؛ خلاف ذلك يُعرض العدّاد وحده.
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(color: ClinicColors.tint, borderRadius: BorderRadius.circular(18)),
-                    child: Column(
-                      children: [
-                        if (challenge.code.isNotEmpty) ...[
-                          const Text('رمز التجريب المحلي', style: TextStyle(fontWeight: FontWeight.w700)),
-                          const SizedBox(height: 4),
-                          Text(challenge.code, style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w800, letterSpacing: 6, color: ClinicColors.primary)),
-                        ],
-                        Text('ينتهي خلال $minutes:$seconds', style: const TextStyle(color: ClinicColors.muted, fontSize: 12)),
-                      ],
-                    ),
+                    child: Text('ينتهي خلال $minutes:$seconds', textAlign: TextAlign.center, style: const TextStyle(color: ClinicColors.muted, fontSize: 12)),
                   ),
                   if (store.authError != null) ...[
                     const SizedBox(height: 12),
