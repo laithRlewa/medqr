@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { query, waitForDb, migrate } = require('./db');
 const { seedIfEmpty, seedRegionsIfEmpty, id } = require('./seed');
-const { toIqIntl, toIqLocal, isIqMobile, phoneLookupValues, sendWhatsappOtp } = require('./otpiq');
+const { toIqIntl, toIqLocal, isIqMobile, phoneLookupValues, sendWhatsappOtp, sendSmsOtp } = require('./otpiq');
 const { registerFeatures, extraBootstrap } = require('./features');
 const { initFirebaseAdmin, sendPushToUser } = require('./push');
 const { registerLegal } = require('./legal');
@@ -178,18 +178,39 @@ async function findOtp(identifier, purpose) {
   return rows[0] || null;
 }
 
+/// قنوات إيصال الرمز بالترتيب. الافتراضي SMS أولاً حتى لا يحتاج المستخدم أي تطبيق إضافي.
+const OTP_SENDERS = { sms: sendSmsOtp, whatsapp: sendWhatsappOtp };
+
+function otpChannels() {
+  const list = String(process.env.OTP_CHANNELS || 'sms,whatsapp')
+    .split(',')
+    .map((c) => c.trim())
+    .filter((c) => OTP_SENDERS[c]);
+  return list.length ? list : ['sms'];
+}
+
 async function issuePhoneOtp(phone, purpose, userId, payload) {
   const identifier = toIqIntl(phone);
   const demo = isDemoPhone(identifier);
   const otp = await createOtp(identifier, purpose, userId, payload, demo ? DEMO_OTP_CODE : undefined);
   if (demo) return { ...otp, demo: true };
-  try {
-    await sendWhatsappOtp(identifier, otp.code);
-  } catch (error) {
-    await query('DELETE FROM otp_codes WHERE id=$1', [otp.id]);
-    throw error;
+  let sentChannel = null;
+  let lastError = null;
+  for (const channel of otpChannels()) {
+    try {
+      await OTP_SENDERS[channel](identifier, otp.code);
+      sentChannel = channel;
+      break;
+    } catch (error) {
+      lastError = error;
+      console.warn(`OTP channel=${channel} failed: ${error.message}`);
+    }
   }
-  return otp;
+  if (!sentChannel) {
+    await query('DELETE FROM otp_codes WHERE id=$1', [otp.id]);
+    throw lastError || new Error('تعذر إرسال رمز التحقق');
+  }
+  return { ...otp, channel: sentChannel };
 }
 
 function otpResponse(phone, purpose, otp) {
@@ -198,7 +219,7 @@ function otpResponse(phone, purpose, otp) {
     phone: toIqLocal(phone),
     email: toIqIntl(phone),
     purpose,
-    channel: isDemoPhone(phone) ? 'demo' : 'whatsapp',
+    channel: isDemoPhone(phone) ? 'demo' : (otp?.channel || 'sms'),
   };
   if (otp && otp.demo) payload.demoCode = DEMO_OTP_CODE;
   return payload;
@@ -236,7 +257,7 @@ app.post('/api/auth/login', async (req, res) => {
     return res.status(401).json({ error: 'البريد الإلكتروني أو كلمة المرور غير صحيحة' });
   }
   if (user.role !== 'admin' && user.role !== 'owner') {
-    return res.status(403).json({ error: 'الأطباء والمرضى يدخلون برقم الهاتف ورمز واتساب فقط' });
+    return res.status(403).json({ error: 'الأطباء والمرضى يدخلون برقم الهاتف ورمز التحقق فقط' });
   }
   await audit(user, 'login', 'تسجيل دخول المدير', { ip: req.ip });
   return res.json({ token: sign(user), user: publicUser(user), requiresOtp: false });
@@ -251,7 +272,7 @@ app.post('/api/auth/otp/request', async (req, res) => {
     const otp = await issuePhoneOtp(user.phone || phone, 'login', user.id);
     return res.json(otpResponse(user.phone || phone, 'login', otp));
   } catch (error) {
-    return res.status(error.status || 500).json({ error: error.message || 'تعذر إرسال رمز واتساب' });
+    return res.status(error.status || 500).json({ error: error.message || 'تعذر إرسال رمز التحقق' });
   }
 });
 
@@ -273,7 +294,7 @@ app.post('/api/auth/register', async (req, res) => {
     const otp = await issuePhoneOtp(phone, 'register', null, { ...body, phone: toIqLocal(phone), email });
     return res.json(otpResponse(phone, 'register', otp));
   } catch (error) {
-    return res.status(error.status || 500).json({ error: error.message || 'تعذر إرسال رمز واتساب' });
+    return res.status(error.status || 500).json({ error: error.message || 'تعذر إرسال رمز التحقق' });
   }
 });
 
@@ -286,7 +307,7 @@ app.post('/api/auth/otp/resend', async (req, res) => {
     const otp = await issuePhoneOtp(prev.email, prev.purpose, prev.user_id, prev.payload);
     return res.json(otpResponse(prev.email, prev.purpose, otp));
   } catch (error) {
-    return res.status(error.status || 500).json({ error: error.message || 'تعذر إرسال رمز واتساب' });
+    return res.status(error.status || 500).json({ error: error.message || 'تعذر إرسال رمز التحقق' });
   }
 });
 
@@ -433,6 +454,22 @@ app.get('/api/bootstrap', auth, async (req, res) => {
   }
   Object.assign(payload, await extraBootstrap(query, user));
   res.json(payload);
+});
+
+/// بيانات التصفح العامة — بلا حساب: الأطباء المعتمدون، المناطق، المنشورات، التوفر، التقييمات.
+/// لا تُعيد أي بيانات مرضى أو جلسات أو ملفات.
+app.get('/api/public/bootstrap', async (_req, res) => {
+  try {
+    const settings = await settingsMap();
+    const doctors = (await query(`SELECT * FROM doctors WHERE status='approved' ORDER BY created_at DESC`)).rows.map(mapDoctor);
+    const regions = (await query('SELECT * FROM map_regions WHERE is_active=TRUE ORDER BY sort_order, name')).rows.map(mapRegion);
+    const posts = (await query('SELECT * FROM posts ORDER BY created_at DESC')).rows.map(mapPost);
+    const comments = (await query('SELECT * FROM post_comments ORDER BY created_at')).rows.map(mapComment);
+    const availability = (await query('SELECT * FROM availability ORDER BY day_of_week')).rows.map(mapAvailability);
+    res.json({ branding: settings, doctors, regions, posts, comments, availability });
+  } catch (error) {
+    res.status(500).json({ error: 'تعذر تحميل البيانات' });
+  }
 });
 
 app.patch('/api/doctors/:id', auth, requireRole('admin', 'owner', 'doctor'), async (req, res) => {

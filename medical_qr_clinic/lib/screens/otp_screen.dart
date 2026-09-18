@@ -80,7 +80,7 @@ class _OtpScreenState extends State<OtpScreen> {
                   const SizedBox(height: 16),
                   Text(_title(challenge.purpose), textAlign: TextAlign.center, style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800)),
                   const SizedBox(height: 8),
-                  Text('أرسلنا رمزاً عبر واتساب إلى ${challenge.email}', textAlign: TextAlign.center, style: const TextStyle(color: ClinicColors.muted)),
+                  Text('أرسلنا رمز تحقق برسالة نصية إلى ${challenge.email}', textAlign: TextAlign.center, style: const TextStyle(color: ClinicColors.muted)),
                   const SizedBox(height: 16),
                   // لا يعيد السيرفر رمزاً إلا في وضع التجريب؛ خلاف ذلك يُعرض العدّاد وحده.
                   Container(

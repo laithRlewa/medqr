@@ -67,6 +67,15 @@ class _ClinicShellState extends State<ClinicShell> {
 
   /// الشريط الجانبي (سطح المكتب) — مرتب حسب أولوية الاستخدام اليومي.
   List<_NavItem> desktopItems(ClinicStore store) {
+    if (!store.loggedIn) {
+      return [
+        const _NavItem(ClinicPage.home, Icons.home_rounded, 'الرئيسية'),
+        const _NavItem(ClinicPage.doctorsMap, Icons.map_rounded, 'خريطة الأطباء'),
+        const _NavItem(ClinicPage.bookAppointment, Icons.medical_services_rounded, 'بحث طبيب'),
+        const _NavItem(ClinicPage.social, Icons.public_rounded, 'المجتمع'),
+        const _NavItem(ClinicPage.profile, Icons.login_rounded, 'تسجيل الدخول'),
+      ];
+    }
     if (store.isDoctor) {
       return [
         const _NavItem(ClinicPage.home, Icons.home_rounded, 'الرئيسية'),
@@ -97,6 +106,15 @@ class _ClinicShellState extends State<ClinicShell> {
 
   /// الشريط السفلي (الجوال) — خمسة عناصر مع زر رئيسي بارز في المنتصف.
   List<_NavItem> mobileItems(ClinicStore store) {
+    if (!store.loggedIn) {
+      return [
+        const _NavItem(ClinicPage.home, Icons.home_rounded, 'الرئيسية'),
+        const _NavItem(ClinicPage.doctorsMap, Icons.map_rounded, 'الأطباء'),
+        const _NavItem(ClinicPage.bookAppointment, Icons.medical_services_rounded, 'بحث', primary: true),
+        const _NavItem(ClinicPage.social, Icons.public_rounded, 'المجتمع'),
+        const _NavItem(ClinicPage.profile, Icons.login_rounded, 'دخول'),
+      ];
+    }
     if (store.isDoctor) {
       return [
         const _NavItem(ClinicPage.home, Icons.home_rounded, 'الرئيسية'),

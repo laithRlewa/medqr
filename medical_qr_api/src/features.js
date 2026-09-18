@@ -390,7 +390,7 @@ function registerFeatures(ctx) {
     const user = rows[0];
     if (!user) return res.status(400).json({ error: 'الحساب غير موجود' });
     if (user.role !== 'admin' && user.role !== 'owner') {
-      return res.status(400).json({ error: 'الأطباء والمرضى يدخلون برقم الهاتف ورمز واتساب فقط' });
+      return res.status(400).json({ error: 'الأطباء والمرضى يدخلون برقم الهاتف ورمز التحقق فقط' });
     }
     return res.json({
       ok: true,

@@ -213,7 +213,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ? 'اختر دورك ثم أكمل البيانات بترتيب واضح'
                     : _isDoctor
                         ? (doctorStep == 0 ? 'الخطوة 1 من 2 — البيانات الأساسية والعيادة' : 'الخطوة 2 من 2 — الخبرة والسيرة والصورة')
-                        : 'رمز التحقق يصل إلى واتساب بعد إرسال النموذج',
+                        : 'رمز التحقق يصل برسالة نصية بعد إرسال النموذج',
                 style: const TextStyle(color: ClinicColors.muted, fontSize: 13),
               ),
             ],
@@ -743,7 +743,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ? 'التالي: التفصيل المهني'
                           : _isDoctor
                               ? 'تقديم للموافقة'
-                              : 'إرسال رمز واتساب',
+                              : 'إرسال رمز التحقق',
                   onTap: busy ? null : (next ? _goToDetail : _submit),
                 ),
               ),

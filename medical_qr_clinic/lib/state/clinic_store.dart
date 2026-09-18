@@ -43,6 +43,8 @@ class ClinicStore extends ChangeNotifier {
   String? pendingProfilePhotoPath;
 
   ClinicUser? currentUser;
+  bool guestMode = false;
+  bool wantsAuth = false;
   ClinicPage page = ClinicPage.home;
   String? selectedPatientId;
   String? selectedDoctorId;
@@ -301,7 +303,50 @@ class ClinicStore extends ChangeNotifier {
 
   void refreshUi() => notifyListeners();
 
+  /// الصفحات المتاحة بلا حساب. الباقي يتطلب تسجيل الدخول.
+  bool _guestAllowed(ClinicPage next) => const {
+        ClinicPage.home,
+        ClinicPage.doctorsMap,
+        ClinicPage.bookAppointment,
+        ClinicPage.doctorPublic,
+        ClinicPage.social,
+        ClinicPage.settings,
+      }.contains(next);
+
+  /// يطلب تسجيل الدخول عند محاولة استخدام ميزة مرتبطة بحساب.
+  void requireAuth() {
+    if (loggedIn) return;
+    wantsAuth = true;
+    notifyListeners();
+  }
+
+  /// يدخل وضع الضيف: تصفح الأطباء والخدمات بلا تسجيل.
+  Future<void> enterGuestMode() async {
+    guestMode = true;
+    wantsAuth = false;
+    page = ClinicPage.home;
+    notifyListeners();
+    try {
+      await refresh();
+    } catch (_) {}
+  }
+
+  /// يعود لتصفح الضيف من شاشة الدخول.
+  void resumeGuest() {
+    if (!guestMode) return;
+    wantsAuth = false;
+    otp = null;
+    resetEmail = null;
+    authError = null;
+    notifyListeners();
+  }
+
   void goTo(ClinicPage next) {
+    if (!loggedIn && guestMode && !_guestAllowed(next)) {
+      wantsAuth = true;
+      notifyListeners();
+      return;
+    }
     if (doctorLocked && !_allowedWhenLocked(next)) {
       lastMessage = doctorPending ? 'الحساب قيد الموافقة' : 'انتهى اشتراكك. تواصل مع الإدارة للتجديد.';
       page = ClinicPage.profile;
@@ -335,6 +380,10 @@ class ClinicStore extends ChangeNotifier {
   }
 
   void openMessages({String? patientId, String? doctorId}) {
+    if (!loggedIn) {
+      requireAuth();
+      return;
+    }
     selectedPatientId = patientId;
     selectedDoctorId = doctorId;
     page = ClinicPage.messages;
@@ -449,7 +498,7 @@ class ClinicStore extends ChangeNotifier {
     try {
       final data = await api.post('/api/auth/otp/request', {'phone': phone.trim()});
       _setOtpFromApi(data);
-      lastMessage = 'أدخل رمز التحقق المرسل إلى واتساب';
+      lastMessage = 'أدخل رمز التحقق المرسل إلى هاتفك';
       return true;
     } catch (e) {
       authError = _err(e);
@@ -506,7 +555,7 @@ class ClinicStore extends ChangeNotifier {
         'workingHours': workingHours.trim(),
       });
       _setOtpFromApi(data);
-      lastMessage = 'أدخل رمز التحقق المرسل إلى واتساب';
+      lastMessage = 'أدخل رمز التحقق المرسل إلى هاتفك';
       return null;
     } catch (e) {
       return _err(e);
@@ -687,6 +736,8 @@ class ClinicStore extends ChangeNotifier {
     PushService.instance.onLoggedOut();
     currentUser = null;
     api.token = null;
+    guestMode = false;
+    wantsAuth = false;
     otp = null;
     resetEmail = null;
     pendingProfilePhotoPath = null;
@@ -700,7 +751,9 @@ class ClinicStore extends ChangeNotifier {
   }
 
   Future<void> refresh() async {
-    final data = await api.get('/api/bootstrap');
+    final data = loggedIn
+        ? await api.get('/api/bootstrap')
+        : await api.get('/api/public/bootstrap');
     applyBootstrap(data);
   }
 
@@ -717,6 +770,7 @@ class ClinicStore extends ChangeNotifier {
       final url = await uploadPath(photoPath);
       if (url != null && url.isNotEmpty) await updateProfilePhoto(url);
     }
+    wantsAuth = false;
     page = ClinicPage.home;
     lastMessage = 'مرحباً ${currentUser?.fullName.split(' ').first ?? ''}';
     await PushService.instance.onLoggedIn();
@@ -870,6 +924,11 @@ class ClinicStore extends ChangeNotifier {
     final patient = currentPatient;
     final user = currentUser;
     if (patient == null || user == null) {
+      if (guestMode) {
+        lastMessage = 'سجّل الدخول لحجز موعد';
+        requireAuth();
+        return;
+      }
       lastMessage = 'يرجى إكمال تسجيل بياناتك كمريض أولاً';
       notifyListeners();
       return;
@@ -1093,6 +1152,10 @@ class ClinicStore extends ChangeNotifier {
   }
 
   Future<void> toggleLike(Post post) async {
+    if (!loggedIn) {
+      requireAuth();
+      return;
+    }
     try {
       await api.post('/api/posts/${post.id}/like');
       await refresh();
@@ -1103,6 +1166,10 @@ class ClinicStore extends ChangeNotifier {
   }
 
   Future<void> addComment(Post post, String content) async {
+    if (!loggedIn) {
+      requireAuth();
+      return;
+    }
     if (content.trim().isEmpty) return;
     await _safe(() async {
       await api.post('/api/posts/${post.id}/comments', {'content': content.trim()});
@@ -1110,6 +1177,10 @@ class ClinicStore extends ChangeNotifier {
   }
 
   Future<void> createPost(String content, String category) async {
+    if (!loggedIn) {
+      requireAuth();
+      return;
+    }
     if (content.trim().isEmpty) return;
     await _safe(() async {
       await api.post('/api/posts', {'content': content.trim(), 'category': category});
@@ -1123,6 +1194,10 @@ class ClinicStore extends ChangeNotifier {
     String messageType = 'text',
     Map<String, dynamic>? questionnaire,
   }) async {
+    if (!loggedIn) {
+      requireAuth();
+      return;
+    }
     final trimmed = content.trim();
     if (trimmed.isEmpty && messageType == 'text') {
       lastMessage = 'اكتب رسالة أولاً';
@@ -1159,6 +1234,10 @@ class ClinicStore extends ChangeNotifier {
     required String comment,
     Visit? visit,
   }) async {
+    if (!loggedIn) {
+      requireAuth();
+      return;
+    }
     await _safe(() async {
       await api.post('/api/reviews', {
         'doctorId': doctor.id,
@@ -1195,6 +1274,10 @@ class ClinicStore extends ChangeNotifier {
   }
 
   Future<void> toggleFollow(Doctor doctor) async {
+    if (!loggedIn) {
+      requireAuth();
+      return;
+    }
     try {
       if (isFollowing(doctor.id)) {
         await api.delete('/api/doctors/${doctor.id}/follow');

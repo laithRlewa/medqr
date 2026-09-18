@@ -21,6 +21,7 @@ class _SplashGateState extends State<SplashGate> {
     final store = ClinicScope.of(context);
     if (store.currentUser != null) return const ClinicShell();
     if (store.otp != null) return const OtpScreen();
+    if (store.guestMode && !store.wantsAuth) return const ClinicShell();
     if (store.resetEmail != null) return const NewPasswordScreen();
     return const LoginScreen();
   }

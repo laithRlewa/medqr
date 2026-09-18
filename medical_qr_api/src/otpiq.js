@@ -117,6 +117,48 @@ async function sendWhatsappOtp(phone, code) {
   throw error;
 }
 
+/// يرسل رمز التحقق عبر رسالة SMS عادية بنفس حساب OTPIQ — لا يتطلب أي تطبيق إضافي.
+async function sendSmsOtp(phone, code) {
+  const { apiKey } = otpiqConfig();
+  const phoneNumber = toIqIntl(phone);
+  const otp = String(code);
+
+  const attempts = [
+    {
+      phoneNumber,
+      smsType: 'verification',
+      provider: 'sms',
+      verificationCode: otp,
+    },
+    {
+      phoneNumber,
+      smsType: 'sms',
+      provider: 'sms',
+      message: `رمز التحقق الخاص بك في MED QR: ${otp}`,
+    },
+  ];
+
+  let lastError = 'تعذر إرسال رمز التحقق';
+  for (const body of attempts) {
+    try {
+      const result = await postOtpiq(apiKey, body);
+      if (result.ok) {
+        console.log(`OTPIQ ok type=${body.smsType} to=${phoneNumber}`);
+        return result.data;
+      }
+      lastError = errorText(result.data, `OTPIQ ${result.status}`);
+      console.warn(`OTPIQ fail type=${body.smsType} status=${result.status} err=${lastError}`);
+    } catch (error) {
+      lastError = error.message || lastError;
+      console.warn(`OTPIQ network type=${body.smsType} err=${lastError}`);
+    }
+  }
+
+  const error = new Error(typeof lastError === 'string' ? lastError : 'تعذر إرسال رمز التحقق');
+  error.status = 502;
+  throw error;
+}
+
 module.exports = {
   digits,
   toIqIntl,
@@ -124,4 +166,5 @@ module.exports = {
   isIqMobile,
   phoneLookupValues,
   sendWhatsappOtp,
+  sendSmsOtp,
 };

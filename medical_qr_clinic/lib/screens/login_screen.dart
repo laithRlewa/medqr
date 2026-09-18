@@ -14,7 +14,7 @@ import 'register_screen.dart';
 const _highlights = [
   (icon: Icons.folder_shared_outlined, title: 'سجل طبي موحّد', body: 'كل زياراتك وتحاليلك وأدويتك في مكان واحد'),
   (icon: Icons.qr_code_2_rounded, title: 'وصول برمز QR', body: 'يقرأ الطبيب ملفك خلال ثانية وبإذنك أنت'),
-  (icon: Icons.lock_outline_rounded, title: 'خصوصية محمية', body: 'دخول برمز مؤقت عبر واتساب بدل كلمة المرور'),
+  (icon: Icons.lock_outline_rounded, title: 'خصوصية محمية', body: 'دخول برمز مؤقت عبر رسالة نصية بدل كلمة المرور'),
 ];
 
 class LoginScreen extends StatefulWidget {
@@ -100,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'أدخل رقم هاتفك المسجّل وسنرسل لك رمز تحقق عبر واتساب.',
+                    'أدخل رقم هاتفك المسجّل وسنرسل لك رمز تحقق برسالة نصية.',
                     style: theme.textTheme.bodyMedium?.copyWith(color: ClinicColors.muted, height: 1.5),
                   ),
                   const SizedBox(height: 26),
@@ -113,7 +113,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                   ],
                   const SizedBox(height: 22),
                   OrangeButton(
-                    label: store.busy ? 'جاري إرسال الرمز…' : 'إرسال رمز واتساب',
+                    label: store.busy ? 'جاري إرسال الرمز…' : 'إرسال رمز التحقق',
                     icon: Icons.chat_bubble_outline_rounded,
                     loading: store.busy,
                     onTap: _valid ? _submit : null,
@@ -131,7 +131,16 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                     icon: const Icon(Icons.person_add_alt_1_outlined, size: 20),
                     label: const Text('إنشاء حساب جديد'),
                   ),
-                  const SizedBox(height: 18),
+                  const SizedBox(height: 10),
+                  TextButton.icon(
+                    onPressed: () => ClinicScope.read(context).enterGuestMode(),
+                    icon: const Icon(Icons.travel_explore_rounded, size: 18),
+                    label: Text(
+                      store.guestMode && store.wantsAuth ? 'متابعة التصفح كضيف' : 'تصفح الأطباء والخدمات كضيف',
+                      style: const TextStyle(fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
                   const _LegalLinks(),
                 ],
               ),
