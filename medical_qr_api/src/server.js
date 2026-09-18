@@ -221,7 +221,6 @@ function otpResponse(phone, purpose, otp) {
     purpose,
     channel: isDemoPhone(phone) ? 'demo' : (otp?.channel || 'sms'),
   };
-  if (otp && otp.demo) payload.demoCode = DEMO_OTP_CODE;
   return payload;
 }
 
