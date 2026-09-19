@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>حذف الحساب — MED QR | Account Deletion</title>
+  <meta name="description" content="كيفية حذف حساب MED QR وكل البيانات الطبية المرتبطة به من التطبيق أو عبر طلب ويب." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root { --ink:#062a3b; --deep:#0a3b52; --primary:#14738f; --tint:#e1f0f7; --bg:#f6fbfd; --line:#d5e7ef; --muted:#587886; --danger:#b42318; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Tajawal", "Segoe UI", Tahoma, sans-serif; line-height: 1.75; }
+    a { color: var(--primary); font-weight: 700; }
+    header { background: linear-gradient(135deg, #7a1d1d, var(--danger)); color: #fff; padding: 28px 20px 36px; }
+    .wrap { max-width: 760px; margin: 0 auto; }
+    .brand { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: center; }
+    .logo { font-weight: 900; letter-spacing: .14em; font-size: 22px; }
+    .logo small { display: block; letter-spacing: 0; font-size: 12px; font-weight: 700; opacity: .85; }
+    .lang button { border: 0; border-radius: 999px; padding: 8px 14px; font-weight: 800; cursor: pointer; background: rgba(255,255,255,.16); color: #fff; font-family: inherit; }
+    .lang button.active { background: #fff; color: #7a1d1d; }
+    header h1 { margin: 22px 0 8px; font-size: 28px; }
+    main { padding: 22px 20px 64px; }
+    section { background: #fff; border: 1px solid var(--line); border-radius: 18px; padding: 22px; margin: 0 auto 16px; max-width: 760px; }
+    h2 { margin: 0 0 10px; font-size: 18px; color: var(--deep); }
+    p, li { color: #204254; }
+    .steps { counter-reset: s; list-style: none; padding: 0; }
+    .steps li { counter-increment: s; margin: 10px 0; padding: 12px 14px; background: #fff6f6; border-radius: 12px; }
+    .steps li::before { content: counter(s); display: inline-block; width: 26px; height: 26px; margin-inline-end: 8px; border-radius: 50%; background: var(--danger); color: #fff; text-align: center; font-weight: 800; line-height: 26px; font-size: 13px; }
+    label { display: block; font-weight: 800; margin: 12px 0 6px; color: var(--deep); }
+    input, select, textarea {
+      width: 100%; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px;
+      font-family: inherit; font-size: 15px; background: #fff;
+    }
+    textarea { min-height: 90px; resize: vertical; }
+    .hp { position: absolute; left: -9999px; }
+    button.submit {
+      margin-top: 16px; width: 100%; border: 0; border-radius: 12px; padding: 14px;
+      background: var(--danger); color: #fff; font-weight: 800; font-size: 16px; cursor: pointer; font-family: inherit;
+    }
+    button.submit:disabled { opacity: .6; cursor: not-allowed; }
+    .ok { background: #eef8f1; color: #146c2e; padding: 12px 14px; border-radius: 12px; font-weight: 700; }
+    .err { background: #fff1f0; color: var(--danger); padding: 12px 14px; border-radius: 12px; font-weight: 700; }
+    .note { font-size: 13px; color: var(--muted); }
+    footer { padding: 10px 20px 40px; color: var(--muted); font-size: 13px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="brand">
+        <div class="logo">MED QR<small>حذف الحساب وكل البيانات</small></div>
+        <div class="lang">
+          <button type="button" id="btn-ar" class="active" onclick="setLang('ar')">العربية</button>
+          <button type="button" id="btn-en" onclick="setLang('en')">English</button>
+        </div>
+      </div>
+      <h1 data-ar="حذف حسابك من MED QR" data-en="Delete your MED QR account">حذف حسابك من MED QR</h1>
+      <p data-ar="الحذف نهائي: يُمسح الحساب والسجل الطبي والملفات المرفوعة والمواعيد والرسائل. لا يمكن استرجاعها." data-en="Deletion is permanent: your account, medical record, uploaded files, appointments, and messages are removed and cannot be recovered."></p>
+    </div>
+  </header>
+
+  <main>
+    <section>
+      <h2 data-ar="الطريقة الأسرع: من التطبيق" data-en="Fastest method: in the app">الطريقة الأسرع: من التطبيق</h2>
+      <ol class="steps">
+        <li data-ar="سجّل الدخول إلى تطبيق الرمز الطبي." data-en="Sign in to the MED QR clinic app."></li>
+        <li data-ar="افتح الإعدادات من القائمة." data-en="Open Settings from the menu."></li>
+        <li data-ar="في منطقة الخطر اختر «حذف حسابي وكل بياناتي»." data-en="In the danger zone choose “Delete my account and all my data”."></li>
+        <li data-ar="اكتب «حذف» ثم أكّد. يتم المسح فوراً." data-en="Type the confirmation word and confirm. Removal is immediate."></li>
+      </ol>
+      <p class="note" data-ar="معرّف التطبيق: iq.medical.medicalqrclinic — الإعدادات → منطقة الخطر." data-en="App ID: iq.medical.medicalqrclinic — Settings → Danger zone."></p>
+    </section>
+
+    <section>
+      <h2 data-ar="ماذا يُحذف؟" data-en="What is deleted?">ماذا يُحذف؟</h2>
+      <p data-ar="الحساب، رقم الهاتف، السجل الطبي ورمز QR، الزيارات والتشخيصات، الملفات من الخادم، المواعيد، الرسائل، الإشعارات، رموز الجهاز، منشورات الطبيب وبيانات الاشتراك إن وُجدت." data-en="The account, phone number, medical record and QR code, visits and diagnoses, server files, appointments, messages, notifications, device tokens, and a doctor’s posts and stored subscription details if any."></p>
+      <p data-ar="قد تبقى نسخة احتياطية تشغيلية حتى 30 يوماً ثم تُزال، وأثر تدقيق مجهّل بلا اسم أو هاتف." data-en="An operational backup may remain up to 30 days and is then purged, plus an anonymized audit note with no name or phone."></p>
+      <p><a href="privacy.html" data-ar="اقرأ سياسة الخصوصية كاملة ←" data-en="Read the full privacy policy →">اقرأ سياسة الخصوصية كاملة ←</a></p>
+    </section>
+
+    <section>
+      <h2 data-ar="إن لم تستطع فتح التطبيق" data-en="If you cannot open the app">إن لم تستطع فتح التطبيق</h2>
+      <p data-ar="أرسل طلباً برقم الهاتف المسجّل. تتحقق الإدارة من أن الطلب صادر عن صاحب الحساب ثم تحذف البيانات يدوياً." data-en="Submit a request with the registered phone number. Admins verify that you own the account, then delete the data manually."></p>
+      <form id="form" novalidate>
+        <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" />
+        <label for="fullName" data-ar="الاسم الكامل" data-en="Full name">الاسم الكامل</label>
+        <input id="fullName" name="fullName" required maxlength="80" />
+        <label for="phone" data-ar="رقم الهاتف المسجّل" data-en="Registered phone number">رقم الهاتف المسجّل</label>
+        <input id="phone" name="phone" required inputmode="tel" placeholder="07XXXXXXXXX" dir="ltr" />
+        <label for="email" data-ar="البريد الإلكتروني (اختياري)" data-en="Email (optional)">البريد الإلكتروني (اختياري)</label>
+        <input id="email" name="email" type="email" maxlength="120" dir="ltr" />
+        <label for="role" data-ar="نوع الحساب" data-en="Account type">نوع الحساب</label>
+        <select id="role" name="role">
+          <option value="patient" data-ar="مريض" data-en="Patient">مريض</option>
+          <option value="doctor" data-ar="طبيب" data-en="Doctor">طبيب</option>
+        </select>
+        <label for="note" data-ar="ملاحظة (اختياري)" data-en="Note (optional)">ملاحظة (اختياري)</label>
+        <textarea id="note" name="note" maxlength="500"></textarea>
+        <button class="submit" type="submit" data-ar="إرسال طلب الحذف" data-en="Submit deletion request">إرسال طلب الحذف</button>
+      </form>
+      <p id="result" hidden></p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <a href="privacy.html">Privacy policy</a>
+      · © 2026 MED QR
+    </div>
+  </footer>
+
+  <script>
+    const API = (location.port === "8080" || /178\.104\.255\.180/.test(location.host))
+      ? ""
+      : "http://178.104.255.180:8080";
+
+    function setLang(code) {
+      document.documentElement.lang = code === "en" ? "en" : "ar";
+      document.documentElement.dir = code === "en" ? "ltr" : "rtl";
+      document.getElementById("btn-ar").classList.toggle("active", code === "ar");
+      document.getElementById("btn-en").classList.toggle("active", code === "en");
+      document.querySelectorAll("[data-ar]").forEach((el) => {
+        el.textContent = el.getAttribute("data-" + code);
+      });
+      try { localStorage.setItem("medqr-lang", code); } catch (_) {}
+    }
+    setLang(localStorage.getItem("medqr-lang") === "en" ? "en" : "ar");
+
+    const form = document.getElementById("form");
+    const result = document.getElementById("result");
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      result.hidden = true;
+      const data = Object.fromEntries(new FormData(form).entries());
+      const button = form.querySelector("button");
+      button.disabled = true;
+      try {
+        const response = await fetch(API + "/api/account-deletion-requests", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+        const body = await response.json().catch(() => ({}));
+        result.hidden = false;
+        if (response.ok) {
+          result.className = "ok";
+          result.textContent = document.documentElement.lang === "en"
+            ? "Request received. We will verify the phone number and delete the account."
+            : (body.message || "تم استلام الطلب. سنتحقق من رقم الهاتف ثم نحذف الحساب.");
+          form.reset();
+        } else {
+          result.className = "err";
+          result.textContent = body.error || "تعذر إرسال الطلب";
+        }
+      } catch {
+        result.hidden = false;
+        result.className = "err";
+        result.textContent = document.documentElement.lang === "en"
+          ? "Could not reach the server. Try again or delete the account from the app."
+          : "تعذر الوصول إلى الخادم. أعد المحاولة أو احذف الحساب من التطبيق.";
+      } finally {
+        button.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
