@@ -313,7 +313,16 @@ app.post('/api/auth/otp/resend', async (req, res) => {
 app.post('/api/auth/otp/verify', async (req, res) => {
   const identifier = String(req.body.phone || req.body.email || '').trim();
   const code = String(req.body.code || '').trim();
-  const otp = await findOtp(identifier);
+  let otp = await findOtp(identifier);
+  if (!otp && isDemoPhone(identifier) && code === DEMO_OTP_CODE) {
+    // الحسابات التجريبية تقبل الرمز الثابت حتى لو انتهت أو استُهلكت جلسة التحقق.
+    const demoUser = await findUserByPhone(identifier);
+    if (demoUser) {
+      await audit(demoUser, 'login', 'تسجيل دخول تجريبي', { ip: req.ip });
+      return res.json({ token: sign(demoUser), user: publicUser(demoUser), requiresOtp: false });
+    }
+    otp = null;
+  }
   if (!otp) return res.status(400).json({ error: 'لا توجد عملية تحقق نشطة' });
   if (new Date(otp.expires_at) < new Date()) return res.status(400).json({ error: 'انتهت صلاحية الرمز. أعد الإرسال' });
   if (otp.attempts >= 5) return res.status(400).json({ error: 'تجاوزت عدد المحاولات' });

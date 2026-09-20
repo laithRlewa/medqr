@@ -487,6 +487,7 @@ class ClinicStore extends ChangeNotifier {
   }
 
   Future<bool> login(String phone) async {
+    if (busy) return false;
     authError = null;
     if (!validPhone(phone)) {
       authError = 'رقم هاتف غير صالح (07XXXXXXXXX)';
@@ -582,6 +583,7 @@ class ClinicStore extends ChangeNotifier {
   Future<String?> verifyOtp(String code) async {
     final challenge = otp;
     if (challenge == null) return 'لا توجد عملية تحقق نشطة';
+    if (busy) return null;
     busy = true;
     notifyListeners();
     try {
@@ -611,6 +613,7 @@ class ClinicStore extends ChangeNotifier {
   Future<String?> resendOtp() async {
     final challenge = otp;
     if (challenge == null) return 'لا توجد عملية تحقق نشطة';
+    if (busy) return null;
     if (DateTime.now().difference(challenge.sentAt).inSeconds < 30) {
       return 'انتظر قليلاً قبل إعادة الإرسال';
     }

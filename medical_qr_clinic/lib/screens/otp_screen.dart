@@ -95,7 +95,7 @@ class _OtpScreenState extends State<OtpScreen> {
                   const SizedBox(height: 20),
                   OtpBoxes(controller: code, onChanged: (_) => setState(() {}), onCompleted: (_) => _verify()),
                   const SizedBox(height: 20),
-                  OrangeButton(label: 'تحقق', onTap: code.text.length == 6 ? _verify : null),
+                  OrangeButton(label: 'تحقق', loading: store.busy, onTap: code.text.length == 6 && !store.busy ? _verify : null),
                   const SizedBox(height: 14),
                   TextButton(
                     onPressed: resendIn > 0
