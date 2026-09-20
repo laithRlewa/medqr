@@ -754,7 +754,10 @@ class ClinicStore extends ChangeNotifier {
   }
 
   Future<void> refresh() async {
-    final data = loggedIn
+    // القرار على التوكن لا على currentUser — أثناء _applyAuth يُضبط التوكن
+    // قبل وصول بيانات المستخدم، فلا يجوز استدعاء نقطة الضيف هناك.
+    final authed = api.token != null && api.token!.isNotEmpty;
+    final data = authed
         ? await api.get('/api/bootstrap')
         : await api.get('/api/public/bootstrap');
     applyBootstrap(data);
