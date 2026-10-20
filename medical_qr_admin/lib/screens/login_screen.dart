@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../state/admin_store.dart';
-import '../theme/brand_palette.dart';
 import '../widgets/brand_logo.dart';
 import 'forgot_password_screen.dart';
 
@@ -75,24 +74,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     ],
                   ),
                   const SizedBox(height: 16),
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: BrandPalette.primary.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('حساب المدير على الخادم', style: TextStyle(fontWeight: FontWeight.w700)),
-                        SizedBox(height: 4),
-                        Text('البريد: admin@medical.iq'),
-                        Text('كلمة المرور: Admin123'),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 18),
                   if (store.authError != null)
                     Padding(
                       padding: const EdgeInsets.only(bottom: 12),
