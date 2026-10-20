@@ -72,7 +72,7 @@ class HomeScreen extends StatelessWidget {
                         if (store.isDoctor) ...[
                           _HeroBtn(Icons.qr_code_scanner, 'مسح QR', () => store.goTo(ClinicPage.scanQr), filled: true),
                           _HeroBtn(Icons.space_dashboard_rounded, 'لوحة التحكم', () => store.goTo(ClinicPage.dashboard)),
-                          _HeroBtn(Icons.pin_drop_rounded, 'مناطق الخريطة', () => store.goTo(ClinicPage.regionsManage)),
+                          if (store.canManageRegions) _HeroBtn(Icons.pin_drop_rounded, 'مناطق الخريطة', () => store.goTo(ClinicPage.regionsManage)),
                         ],
                       ],
                     ),
@@ -142,7 +142,7 @@ class HomeScreen extends StatelessWidget {
                   _QuickTile(ClinicIcons.patient, 'المرضى', 'قائمة مرضاك', ClinicColors.accent, () => store.goTo(ClinicPage.myPatients)),
                   _QuickTile(ClinicIcons.appointment, 'المواعيد', 'تأكيد الطلبات', ClinicColors.primaryDeep, () => store.goTo(ClinicPage.appointments)),
                   _QuickTile(ClinicIcons.medicalBill, 'إحصائيات', 'أداء العيادة', ClinicColors.available, () => store.goTo(ClinicPage.doctorStats)),
-                  _QuickTile(ClinicIcons.hospital, 'مناطق الخريطة', 'وزّع الأطباء', ClinicColors.primary, () => store.goTo(ClinicPage.regionsManage)),
+                  if (store.canManageRegions) _QuickTile(ClinicIcons.hospital, 'مناطق الخريطة', 'وزّع الأطباء', ClinicColors.primary, () => store.goTo(ClinicPage.regionsManage)),
                   _QuickTile(ClinicIcons.waitingRoom, 'أوقات التوفر', 'ساعات العمل', ClinicColors.accent, () => store.goTo(ClinicPage.availability)),
                   _QuickTile(ClinicIcons.onlineConsultation, 'الرسائل', 'محادثات المرضى', ClinicColors.primaryDeep, () => store.goTo(ClinicPage.messages)),
                   _QuickTile(ClinicIcons.nurse, 'المجتمع الطبي', 'انشر وتفاعل', ClinicColors.available, () => store.goTo(ClinicPage.social)),

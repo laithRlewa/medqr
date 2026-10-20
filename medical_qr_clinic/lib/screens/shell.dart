@@ -29,6 +29,27 @@ import 'settings_screen.dart';
 import 'social_screen.dart';
 import 'regions_manage_screen.dart';
 
+/// شريط رجوع علوي يظهر في الجوال عندما يوجد صفحة سابقة في سجل التنقل.
+class _BackBar extends StatelessWidget {
+  const _BackBar({required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 4, 10, 0),
+      child: Row(
+        children: [
+          CircleIconBtn(icon: Icons.arrow_forward_ios, size: 38, onTap: onTap),
+          const SizedBox(width: 6),
+          const Text('رجوع', style: TextStyle(fontWeight: FontWeight.w700, color: ClinicColors.muted)),
+        ],
+      ),
+    );
+  }
+}
+
 class _NavItem {
   const _NavItem(this.page, this.icon, this.label, {this.badge = false, this.primary = false});
   final ClinicPage page;
@@ -84,7 +105,7 @@ class _ClinicShellState extends State<ClinicShell> {
         const _NavItem(ClinicPage.appointments, Icons.event_available_rounded, 'المواعيد'),
         const _NavItem(ClinicPage.myPatients, Icons.groups_rounded, 'المرضى'),
         const _NavItem(ClinicPage.messages, Icons.forum_rounded, 'الرسائل', badge: true),
-        const _NavItem(ClinicPage.regionsManage, Icons.pin_drop_rounded, 'المناطق'),
+        if (store.canManageRegions) const _NavItem(ClinicPage.regionsManage, Icons.pin_drop_rounded, 'المناطق'),
         const _NavItem(ClinicPage.social, Icons.public_rounded, 'المجتمع'),
         const _NavItem(ClinicPage.notifications, Icons.notifications_rounded, 'الإشعارات', badge: true),
         const _NavItem(ClinicPage.profile, Icons.person_rounded, 'حسابي'),
@@ -191,34 +212,48 @@ class _ClinicShellState extends State<ClinicShell> {
   Widget _mobile(BuildContext context) {
     final store = ClinicScope.of(context);
     final nav = mobileItems(store);
-    return Scaffold(
-      backgroundColor: ClinicColors.bg,
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: ColoredBox(
-              color: ClinicColors.bg,
-              child: SafeArea(bottom: false, child: pageOf(store)),
-            ),
-          ),
-          if (!_hideDock(store.page))
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: FloatingDock(
-                selectedIndex: _selectedIndex(store, nav),
-                items: [
-                  for (final item in nav)
-                    DockItem(
-                      icon: item.icon,
-                      label: item.label,
-                      badge: item.badge && store.unreadCount > 0,
-                      primary: item.primary,
-                    ),
-                ],
-                onSelected: (value) => store.goTo(nav[value].page),
+    return PopScope(
+      canPop: !store.canGoBack,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) store.back();
+      },
+      child: Scaffold(
+        backgroundColor: ClinicColors.bg,
+        body: Stack(
+          children: [
+            Positioned.fill(
+              child: ColoredBox(
+                color: ClinicColors.bg,
+                child: SafeArea(
+                  bottom: false,
+                  child: Column(
+                    children: [
+                      if (store.canGoBack) _BackBar(onTap: store.back),
+                      Expanded(child: pageOf(store)),
+                    ],
+                  ),
+                ),
               ),
             ),
-        ],
+            if (!_hideDock(store.page))
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: FloatingDock(
+                  selectedIndex: _selectedIndex(store, nav),
+                  items: [
+                    for (final item in nav)
+                      DockItem(
+                        icon: item.icon,
+                        label: item.label,
+                        badge: item.badge && store.unreadCount > 0,
+                        primary: item.primary,
+                      ),
+                  ],
+                  onSelected: (value) => store.goTo(nav[value].page),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -307,6 +342,14 @@ class _ClinicShellState extends State<ClinicShell> {
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Row(
                         children: [
+                          if (store.canGoBack) ...[
+                            IconButton(
+                              tooltip: 'رجوع',
+                              onPressed: store.back,
+                              icon: const Icon(Icons.arrow_forward_ios, size: 18),
+                            ),
+                            const SizedBox(width: 4),
+                          ],
                           StatusChip(label: roleAr(store.role), color: ClinicColors.primary),
                           if (store.doctorLocked) ...[
                             const SizedBox(width: 8),

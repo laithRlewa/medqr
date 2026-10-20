@@ -77,7 +77,7 @@ class ClinicStore extends ChangeNotifier {
   bool get isPatient => role == 'patient';
   bool get isDoctor => role == 'doctor';
   bool get isAdmin => role == 'admin' || role == 'owner';
-  bool get canManageRegions => isDoctor || isAdmin;
+  bool get canManageRegions => isAdmin;
   bool get loggedIn => currentUser != null;
 
   Patient? get currentPatient {
@@ -324,6 +324,7 @@ class ClinicStore extends ChangeNotifier {
   Future<void> enterGuestMode() async {
     guestMode = true;
     wantsAuth = false;
+    _navStack.clear();
     page = ClinicPage.home;
     notifyListeners();
     try {
@@ -341,6 +342,34 @@ class ClinicStore extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// سجل التنقل الداخلي — يمكّن الرجوع لكل الصفحات داخل التطبيق.
+  final List<({ClinicPage page, String? patientId, String? doctorId})> _navStack = [];
+
+  bool get canGoBack => _navStack.isNotEmpty;
+
+  void _pushNav() {
+    _navStack.add((page: page, patientId: selectedPatientId, doctorId: selectedDoctorId));
+    if (_navStack.length > 50) _navStack.removeAt(0);
+  }
+
+  /// يرجع للصفحة السابقة — وإن لم توجد يعود للرئيسية.
+  void back() {
+    if (_navStack.isEmpty) {
+      if (page != ClinicPage.home) {
+        page = ClinicPage.home;
+        selectedPatientId = null;
+        selectedDoctorId = null;
+        notifyListeners();
+      }
+      return;
+    }
+    final prev = _navStack.removeLast();
+    page = prev.page;
+    selectedPatientId = prev.patientId;
+    selectedDoctorId = prev.doctorId;
+    notifyListeners();
+  }
+
   void goTo(ClinicPage next) {
     if (!loggedIn && guestMode && !_guestAllowed(next)) {
       wantsAuth = true;
@@ -353,6 +382,7 @@ class ClinicStore extends ChangeNotifier {
       notifyListeners();
       return;
     }
+    if (next != page) _pushNav();
     page = next;
     if (next != ClinicPage.patientRecord && next != ClinicPage.messages) selectedPatientId = null;
     if (next != ClinicPage.doctorPublic && next != ClinicPage.messages) selectedDoctorId = null;
@@ -364,6 +394,7 @@ class ClinicStore extends ChangeNotifier {
 
   void openPatient(String patientId) {
     if (!isDoctor || doctorLocked) return;
+    _pushNav();
     selectedPatientId = patientId;
     page = ClinicPage.patientRecord;
     notifyListeners();
@@ -374,6 +405,7 @@ class ClinicStore extends ChangeNotifier {
   }
 
   void openDoctor(String doctorId) {
+    _pushNav();
     selectedDoctorId = doctorId;
     page = ClinicPage.doctorPublic;
     notifyListeners();
@@ -384,6 +416,7 @@ class ClinicStore extends ChangeNotifier {
       requireAuth();
       return;
     }
+    _pushNav();
     selectedPatientId = patientId;
     selectedDoctorId = doctorId;
     page = ClinicPage.messages;
@@ -744,6 +777,7 @@ class ClinicStore extends ChangeNotifier {
     otp = null;
     resetEmail = null;
     pendingProfilePhotoPath = null;
+    _navStack.clear();
     page = ClinicPage.home;
     selectedPatientId = null;
     selectedDoctorId = null;
@@ -777,6 +811,7 @@ class ClinicStore extends ChangeNotifier {
       if (url != null && url.isNotEmpty) await updateProfilePhoto(url);
     }
     wantsAuth = false;
+    _navStack.clear();
     page = ClinicPage.home;
     lastMessage = 'مرحباً ${currentUser?.fullName.split(' ').first ?? ''}';
     await PushService.instance.onLoggedIn();
@@ -885,6 +920,8 @@ class ClinicStore extends ChangeNotifier {
         'gender': updated.gender,
         'dateOfBirth': updated.dateOfBirth,
         'profilePhoto': updated.profilePhoto,
+        'latitude': updated.latitude,
+        'longitude': updated.longitude,
       });
       await api.patch('/api/me', {'fullName': updated.fullName, 'phone': updated.phone});
       await refresh();
@@ -954,6 +991,7 @@ class ClinicStore extends ChangeNotifier {
         'reason': reason,
       });
     }, 'تم إرسال طلب الموعد');
+    _pushNav();
     page = ClinicPage.appointments;
     notifyListeners();
   }

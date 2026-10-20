@@ -66,7 +66,7 @@ class MoreMenuScreen extends StatelessWidget {
           _item(context, ClinicIcons.patient, 'المرضى', 'الجلسات والسجلات المتاحة', () => store.goTo(ClinicPage.myPatients)),
           _item(context, ClinicIcons.appointment, 'المواعيد', 'تأكيد الطلبات وإدارة الجدول', () => store.goTo(ClinicPage.appointments)),
           const _SectionLabel('إدارة العيادة'),
-          _item(context, ClinicIcons.hospital, 'مناطق الخريطة', 'حدد منطقة وأضف إليها الأطباء', () => store.goTo(ClinicPage.regionsManage)),
+          if (store.canManageRegions) _item(context, ClinicIcons.hospital, 'مناطق الخريطة', 'حدد منطقة وأضف إليها الأطباء', () => store.goTo(ClinicPage.regionsManage)),
           _item(context, ClinicIcons.waitingRoom, 'أوقات التوفر', 'حدد ساعات عملك', () => store.goTo(ClinicPage.availability)),
           _item(context, ClinicIcons.insurance, 'التقويم', 'عرض أسبوعي لمواعيدك', () => store.goTo(ClinicPage.doctorCalendar)),
           _item(context, ClinicIcons.medicalBill, 'الإحصائيات', 'أداء العيادة والزيارات', () => store.goTo(ClinicPage.doctorStats)),

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 
+import '../data/doctor_locations.dart';
 import '../state/clinic_store.dart';
 import '../widgets/clinic_icon.dart';
 import '../widgets/media.dart';
@@ -33,6 +36,7 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
   late final TextEditingController newPass;
   String city = 'بغداد';
   String specialty = 'طب عام';
+  LatLng? _clinicPoint;
 
   @override
   void didChangeDependencies() {
@@ -53,6 +57,9 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
     newPass = TextEditingController();
     city = d?.city ?? 'بغداد';
     specialty = d?.specialty ?? 'طب عام';
+    if (d?.latitude != null && d?.longitude != null) {
+      _clinicPoint = LatLng(d!.latitude!, d.longitude!);
+    }
     ready = true;
   }
 
@@ -116,6 +123,11 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
       ..yearsOfExperience = int.tryParse(years.text) ?? d.yearsOfExperience
       ..city = city
       ..specialty = specialty;
+    if (_clinicPoint != null) {
+      d
+        ..latitude = _clinicPoint!.latitude
+        ..longitude = _clinicPoint!.longitude;
+    }
     await store.updateDoctorProfile(d);
     if (!mounted) return;
     setState(() {
@@ -320,11 +332,72 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
           _field('اسم العيادة', clinic),
           _field('رقم الترخيص', license),
           _dropdown('المدينة', city, cities, (v) => setState(() => city = v)),
+          _clinicLocationPicker(),
           _dropdown('التخصص', specialty, specialties, (v) => setState(() => specialty = v)),
           _field('سنوات الخبرة', years, type: TextInputType.number),
           _field('ساعات العمل', hours, hint: 'مثال: 09:00 - 17:00'),
           _field('المؤهلات', quals, lines: 2),
           _field('نبذة مختصرة', bio, lines: 4),
+        ],
+      ),
+    );
+  }
+
+  Widget _clinicLocationPicker() {
+    final point = _clinicPoint;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            children: [
+              const Expanded(
+                child: Text('موقع العيادة على الخريطة', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
+              ),
+              if (editing)
+                const Text('اضغط لتحديد الموقع', style: TextStyle(color: ClinicColors.muted, fontSize: 11)),
+            ],
+          ),
+          const SizedBox(height: 6),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: SizedBox(
+              height: 190,
+              child: FlutterMap(
+                options: MapOptions(
+                  initialCenter: point ?? baghdadCenter,
+                  initialZoom: point != null ? 14 : 11.5,
+                  minZoom: 10.5,
+                  maxZoom: 17,
+                  interactionOptions: const InteractionOptions(flags: InteractiveFlag.all & ~InteractiveFlag.rotate),
+                  onTap: editing ? (_, p) => setState(() => _clinicPoint = p) : null,
+                ),
+                children: [
+                  TileLayer(
+                    urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    userAgentPackageName: 'iq.medical.qr.clinic',
+                  ),
+                  if (point != null)
+                    MarkerLayer(
+                      markers: [
+                        Marker(
+                          point: point,
+                          width: 40,
+                          height: 40,
+                          child: const Icon(Icons.location_on, color: Color(0xFFC62828), size: 36),
+                        ),
+                      ],
+                    ),
+                ],
+              ),
+            ),
+          ),
+          if (!editing && point == null)
+            const Padding(
+              padding: EdgeInsets.only(top: 6),
+              child: Text('لم يُحدد موقع العيادة بعد — فعّل التعديل واضغط على الخريطة', style: TextStyle(color: ClinicColors.muted, fontSize: 11)),
+            ),
         ],
       ),
     );

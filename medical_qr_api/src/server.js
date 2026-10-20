@@ -178,11 +178,11 @@ async function findOtp(identifier, purpose) {
   return rows[0] || null;
 }
 
-/// قنوات إيصال الرمز بالترتيب. الافتراضي SMS أولاً حتى لا يحتاج المستخدم أي تطبيق إضافي.
+/// قنوات إيصال الرمز بالترتيب. الافتراضي واتساب فقط.
 const OTP_SENDERS = { sms: sendSmsOtp, whatsapp: sendWhatsappOtp };
 
 function otpChannels() {
-  const list = String(process.env.OTP_CHANNELS || 'sms,whatsapp')
+  const list = String(process.env.OTP_CHANNELS || 'whatsapp')
     .split(',')
     .map((c) => c.trim())
     .filter((c) => OTP_SENDERS[c]);
@@ -486,7 +486,9 @@ app.patch('/api/doctors/:id', auth, requireRole('admin', 'owner', 'doctor'), asy
   if (req.user.role === 'doctor' && current.user_id !== req.user.id) return res.status(403).json({ error: 'غير مصرح' });
   const b = req.body || {};
   const nextStatus = req.user.role === 'doctor' ? current.status : (b.status || current.status);
-  const nextRegionId = Object.prototype.hasOwnProperty.call(b, 'regionId') ? (b.regionId || null) : current.region_id;
+  const nextRegionId = req.user.role === 'doctor'
+    ? current.region_id
+    : (Object.prototype.hasOwnProperty.call(b, 'regionId') ? (b.regionId || null) : current.region_id);
   const nextLat = Object.prototype.hasOwnProperty.call(b, 'latitude') ? (b.latitude == null ? null : Number(b.latitude)) : current.latitude;
   const nextLng = Object.prototype.hasOwnProperty.call(b, 'longitude') ? (b.longitude == null ? null : Number(b.longitude)) : current.longitude;
   await query(

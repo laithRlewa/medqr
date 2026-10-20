@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:http/http.dart' as http;
 
@@ -54,7 +53,7 @@ class ApiClient {
     if (token != null && token!.isNotEmpty) {
       request.headers['Authorization'] = 'Bearer $token';
     }
-    request.files.add(await http.MultipartFile.fromPath(field, filePath, filename: filePath.split(Platform.pathSeparator).last));
+    request.files.add(await http.MultipartFile.fromPath(field, filePath, filename: filePath.split(RegExp(r'[\\/]')).last));
     final streamed = await request.send();
     final res = await http.Response.fromStream(streamed);
     return _decode(res);

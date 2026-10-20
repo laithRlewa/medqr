@@ -89,7 +89,7 @@ class _RegionsManageScreenState extends State<RegionsManageScreen> {
   Widget build(BuildContext context) {
     final store = ClinicScope.of(context);
     if (!store.canManageRegions) {
-      return const Center(child: Text('إدارة المناطق متاحة للأطباء والإدارة فقط'));
+      return const Center(child: Text('إدارة المناطق متاحة للإدارة فقط'));
     }
     final regions = [...store.regions]..sort((a, b) => a.sortOrder.compareTo(b.sortOrder));
     final selected = store.regionById(_selectedRegionId);

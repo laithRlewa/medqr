@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../api/api_client.dart';
 import '../api/mappers.dart';
@@ -19,6 +20,8 @@ class AdminStore extends ChangeNotifier {
     sessions = [];
     users = [];
   }
+
+  static const _tokenKey = 'auth_token';
 
   final api = ApiClient();
   bool busy = false;
@@ -42,6 +45,15 @@ class AdminStore extends ChangeNotifier {
   late List<MedicalFile> files;
   late List<AccessSession> sessions;
   late List<PlatformUser> users;
+  List<MapRegion> regions = [];
+
+  MapRegion? regionById(String? id) {
+    if (id == null || id.isEmpty) return null;
+    for (final r in regions) {
+      if (r.id == id) return r;
+    }
+    return null;
+  }
 
   DateTime get now => DateTime.now();
 
@@ -91,6 +103,8 @@ class AdminStore extends ChangeNotifier {
         authError = 'هذا التطبيق مخصص للمديرين فقط';
         return authError;
       }
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(_tokenKey, api.token!);
       return null;
     } catch (e) {
       authError = _err(e);
@@ -115,6 +129,31 @@ class AdminStore extends ChangeNotifier {
     currentUser = null;
     api.token = null;
     page = AdminPage.dashboard;
+    SharedPreferences.getInstance().then((p) => p.remove(_tokenKey));
+    notifyListeners();
+  }
+
+  Future<void> restoreSession() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final saved = prefs.getString(_tokenKey);
+      if (saved == null || saved.isEmpty) return;
+      api.token = saved;
+      await refresh().timeout(const Duration(seconds: 15));
+      final role = currentUser?.role;
+      if (role != 'admin' && role != 'owner') {
+        currentUser = null;
+        api.token = null;
+        await prefs.remove(_tokenKey);
+      }
+    } catch (e) {
+      currentUser = null;
+      api.token = null;
+      if (e is ApiException) {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.remove(_tokenKey);
+      }
+    }
     notifyListeners();
   }
 
@@ -463,7 +502,18 @@ class AdminStore extends ChangeNotifier {
     files = asMapList(data['files']).map(_file).toList();
     sessions = asMapList(data['sessions']).map(_session).toList();
     users = asMapList(data['users']).map(_platformUser).toList();
+    regions = asMapList(data['regions']).map(_region).toList();
   }
+
+  MapRegion _region(Map<String, dynamic> r) => MapRegion(
+        id: asString(r['id']),
+        name: asString(r['name']),
+        city: asString(r['city'], 'بغداد'),
+        centerLat: asDouble(r['centerLat']),
+        centerLng: asDouble(r['centerLng']),
+        zoom: asDouble(r['zoom'], 13),
+        isActive: asBool(r['isActive'], true),
+      );
 
   Doctor _doctor(Map<String, dynamic> d) => Doctor(
         id: asString(d['id']),
@@ -493,6 +543,9 @@ class AdminStore extends ChangeNotifier {
         lastModifiedAt: asDateOrNull(d['lastModifiedAt']),
         featured: asBool(d['featured']),
         certificates: asStrings(d['certificates']),
+        regionId: d['regionId']?.toString(),
+        latitude: asDoubleOrNull(d['latitude']),
+        longitude: asDoubleOrNull(d['longitude']),
       );
 
   Patient _patient(Map<String, dynamic> p) => Patient(

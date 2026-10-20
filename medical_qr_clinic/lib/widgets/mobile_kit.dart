@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../data/doctor_photos.dart';
+import '../state/clinic_store.dart';
 import '../models/models.dart';
 import '../theme/clinic_style.dart';
 import 'clinic_icon.dart';
@@ -304,7 +305,19 @@ class MobilePageHeader extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(4, 8, 4, 16),
       child: Row(
         children: [
-          CircleIconBtn(icon: Icons.arrow_forward_ios, size: 42, onTap: onBack ?? () => Navigator.maybePop(context)),
+          CircleIconBtn(
+            icon: Icons.arrow_forward_ios,
+            size: 42,
+            onTap: onBack ??
+                () {
+                  final store = ClinicScope.of(context);
+                  if (store.canGoBack) {
+                    store.back();
+                  } else {
+                    Navigator.maybePop(context);
+                  }
+                },
+          ),
           Expanded(
             child: Text(title, textAlign: TextAlign.center, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
           ),

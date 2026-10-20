@@ -37,6 +37,13 @@ double asDouble(dynamic value, [double fallback = 0]) {
   return double.tryParse(value?.toString() ?? '') ?? fallback;
 }
 
+double? asDoubleOrNull(dynamic value) {
+  if (value == null || value.toString().isEmpty) return null;
+  if (value is double) return value;
+  if (value is int) return value.toDouble();
+  return double.tryParse(value.toString());
+}
+
 bool asBool(dynamic value, [bool fallback = false]) {
   if (value is bool) return value;
   if (value == null) return fallback;

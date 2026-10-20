@@ -153,12 +153,22 @@ function registerFeatures(ctx) {
 
   app.use('/uploads', require('express').static(uploadsDir));
 
+  // لوحة الإدارة وتطبيق المستخدم (Flutter web) — ملفات ثابتة مع fallback لمسارات SPA.
+  for (const webapp of ['admin', 'app']) {
+    const webDir = path.join(__dirname, '..', 'public', webapp);
+    app.use(`/${webapp}`, require('express').static(webDir));
+    app.get(`/${webapp}/*`, (req, res, next) => {
+      if (path.extname(req.path)) return next();
+      res.sendFile(path.join(webDir, 'index.html'));
+    });
+  }
+
   app.get('/api/regions', auth, async (_req, res) => {
     const rows = (await query('SELECT * FROM map_regions WHERE is_active=TRUE ORDER BY sort_order, name')).rows;
     res.json({ regions: rows.map(mapRegion) });
   });
 
-  app.post('/api/regions', auth, requireRole('admin', 'owner', 'doctor'), async (req, res) => {
+  app.post('/api/regions', auth, requireRole('admin', 'owner'), async (req, res) => {
     const b = req.body || {};
     const name = String(b.name || '').trim();
     const centerLat = Number(b.centerLat);
@@ -178,7 +188,7 @@ function registerFeatures(ctx) {
     res.json({ region: mapRegion(region) });
   });
 
-  app.patch('/api/regions/:id', auth, requireRole('admin', 'owner', 'doctor'), async (req, res) => {
+  app.patch('/api/regions/:id', auth, requireRole('admin', 'owner'), async (req, res) => {
     const current = (await query('SELECT * FROM map_regions WHERE id=$1', [req.params.id])).rows[0];
     if (!current) return res.status(404).json({ error: 'المنطقة غير موجودة' });
     const b = req.body || {};
@@ -207,14 +217,14 @@ function registerFeatures(ctx) {
     res.json({ region: mapRegion(region) });
   });
 
-  app.delete('/api/regions/:id', auth, requireRole('admin', 'owner', 'doctor'), async (req, res) => {
+  app.delete('/api/regions/:id', auth, requireRole('admin', 'owner'), async (req, res) => {
     await query(`UPDATE doctors SET region_id=NULL WHERE region_id=$1`, [req.params.id]);
     await query(`UPDATE map_regions SET is_active=FALSE WHERE id=$1`, [req.params.id]);
     await audit(req.user, 'admin_action', 'تعطيل منطقة خريطة', { targetType: 'MapRegion', targetId: req.params.id });
     res.json({ ok: true });
   });
 
-  app.post('/api/regions/:id/doctors', auth, requireRole('admin', 'owner', 'doctor'), async (req, res) => {
+  app.post('/api/regions/:id/doctors', auth, requireRole('admin', 'owner'), async (req, res) => {
     const region = (await query('SELECT * FROM map_regions WHERE id=$1 AND is_active=TRUE', [req.params.id])).rows[0];
     if (!region) return res.status(404).json({ error: 'المنطقة غير موجودة' });
     const doctorIds = Array.isArray(req.body?.doctorIds) ? req.body.doctorIds.map(String) : [];
@@ -233,6 +243,19 @@ function registerFeatures(ctx) {
     await audit(req.user, 'admin_action', `تحديث أطباء منطقة ${region.name}`, { targetType: 'MapRegion', targetId: region.id });
     const doctors = (await query('SELECT * FROM doctors WHERE region_id=$1 ORDER BY full_name', [region.id])).rows.map(mapDoctor);
     res.json({ region: mapRegion(region), doctors });
+  });
+
+  /// تفريغ بيانات المنصة — يُبقي حسابات الإدارة والإعدادات والمناطق فقط. لا يمكن التراجع.
+  app.post('/api/admin/reset-data', auth, requireRole('admin', 'owner'), async (req, res) => {
+    await query(`
+      TRUNCATE TABLE
+        post_likes, post_comments, follows, achievements, doctor_reviews, messages,
+        device_tokens, otp_codes, notifications, access_sessions, medical_files,
+        appointments, availability, visits, posts, audit_logs, activations,
+        payment_cards, doctors, patients;
+      DELETE FROM users WHERE role NOT IN ('admin','owner');`);
+    await audit(req.user, 'admin_action', 'تفريغ بيانات المنصة التجريبية');
+    res.json({ ok: true });
   });
 
   app.post('/api/me/deactivate', auth, requireRole('patient'), async (req, res) => {

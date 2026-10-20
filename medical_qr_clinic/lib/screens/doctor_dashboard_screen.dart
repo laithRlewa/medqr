@@ -90,7 +90,7 @@ class DoctorDashboardScreen extends StatelessWidget {
                   _HeroAction(ClinicIcons.medicalCheckUp, 'مسح QR', () => store.goTo(ClinicPage.scanQr), filled: true),
                   _HeroAction(ClinicIcons.appointment, 'التقويم', () => store.goTo(ClinicPage.doctorCalendar)),
                   _HeroAction(ClinicIcons.medicalBill, 'إحصائيات', () => store.goTo(ClinicPage.doctorStats)),
-                  _HeroAction(ClinicIcons.hospital, 'المناطق', () => store.goTo(ClinicPage.regionsManage)),
+                  if (store.canManageRegions) _HeroAction(ClinicIcons.hospital, 'المناطق', () => store.goTo(ClinicPage.regionsManage)),
                   if (!mobile) _HeroAction(ClinicIcons.waitingRoom, 'التوفر', () => store.goTo(ClinicPage.availability)),
                 ],
               ),
@@ -98,6 +98,7 @@ class DoctorDashboardScreen extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 16),
+        if (store.canManageRegions)
         SoftCard(
           onTap: () => store.goTo(ClinicPage.regionsManage),
           padding: const EdgeInsets.all(16),

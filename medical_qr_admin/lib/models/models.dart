@@ -1,6 +1,7 @@
 enum AdminPage {
   dashboard,
   doctors,
+  doctorsMap,
   activations,
   patients,
   posts,
@@ -64,6 +65,9 @@ class Doctor {
     this.lastModifiedBy,
     this.lastModifiedAt,
     this.featured = false,
+    this.regionId,
+    this.latitude,
+    this.longitude,
     List<String>? certificates,
   }) : certificates = certificates ?? [];
 
@@ -93,7 +97,30 @@ class Doctor {
   bool featured;
   String? lastModifiedBy;
   DateTime? lastModifiedAt;
+  String? regionId;
+  double? latitude;
+  double? longitude;
   final DateTime createdDate;
+}
+
+class MapRegion {
+  MapRegion({
+    required this.id,
+    required this.name,
+    required this.centerLat,
+    required this.centerLng,
+    this.city = 'بغداد',
+    this.zoom = 13,
+    this.isActive = true,
+  });
+
+  final String id;
+  final String name;
+  final String city;
+  final double centerLat;
+  final double centerLng;
+  final double zoom;
+  final bool isActive;
 }
 
 class Patient {

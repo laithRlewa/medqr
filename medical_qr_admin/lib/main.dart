@@ -52,12 +52,22 @@ class AppRoot extends StatefulWidget {
 }
 
 class _AppRootState extends State<AppRoot> {
-  bool ready = false;
+  bool splashDone = false;
+  bool sessionChecked = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await AdminScope.of(context).restoreSession();
+      if (mounted) setState(() => sessionChecked = true);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    if (!ready) {
-      return SplashScreen(onDone: () => setState(() => ready = true));
+    if (!splashDone || !sessionChecked) {
+      return SplashScreen(onDone: () => setState(() => splashDone = true));
     }
     final store = AdminScope.of(context);
     if (store.currentUser == null) return const LoginScreen();

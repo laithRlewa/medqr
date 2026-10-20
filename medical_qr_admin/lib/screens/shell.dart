@@ -8,6 +8,7 @@ import 'analytics_screen.dart';
 import 'appearance_screen.dart';
 import 'audit_screen.dart';
 import 'dashboard_screen.dart';
+import 'doctors_map_screen.dart';
 import 'doctors_screen.dart';
 import 'notifications_screen.dart';
 import 'patients_screen.dart';
@@ -36,6 +37,7 @@ class _AdminShellState extends State<AdminShell> {
   List<_NavItem> items(AdminStore store) => [
         const _NavItem(AdminPage.dashboard, Icons.space_dashboard_outlined, 'لوحة التحكم'),
         const _NavItem(AdminPage.doctors, Icons.medical_services_outlined, 'الأطباء'),
+        const _NavItem(AdminPage.doctorsMap, Icons.map_outlined, 'خريطة الأطباء'),
         const _NavItem(AdminPage.activations, Icons.credit_card_outlined, 'تفعيل الاشتراكات'),
         const _NavItem(AdminPage.patients, Icons.groups_outlined, 'المرضى'),
         const _NavItem(AdminPage.posts, Icons.article_outlined, 'المنشورات'),
@@ -50,6 +52,7 @@ class _AdminShellState extends State<AdminShell> {
   Widget _page(AdminPage page) => switch (page) {
         AdminPage.dashboard => const DashboardScreen(),
         AdminPage.doctors => const DoctorsScreen(),
+        AdminPage.doctorsMap => const DoctorsMapScreen(),
         AdminPage.activations => const ActivationsScreen(),
         AdminPage.patients => const PatientsScreen(),
         AdminPage.posts => const PostsScreen(),

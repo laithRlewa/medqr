@@ -174,7 +174,7 @@ class _MobileHomeScreenState extends State<MobileHomeScreen> {
                   _QuickAction(ClinicIcons.medicalApp, 'لوحتي', ClinicColors.accent, () => store.goTo(ClinicPage.dashboard)),
                   _QuickAction(ClinicIcons.patient, 'مرضاي', ClinicColors.primaryDeep, () => store.goTo(ClinicPage.myPatients)),
                   _QuickAction(ClinicIcons.appointment, 'المواعيد', ClinicColors.available, () => store.goTo(ClinicPage.appointments)),
-                  _QuickAction(ClinicIcons.hospital, 'المناطق', ClinicColors.primary, () => store.goTo(ClinicPage.regionsManage)),
+                  if (store.canManageRegions) _QuickAction(ClinicIcons.hospital, 'المناطق', ClinicColors.primary, () => store.goTo(ClinicPage.regionsManage)),
                   _QuickAction(ClinicIcons.waitingRoom, 'التوفر', ClinicColors.accent, () => store.goTo(ClinicPage.availability)),
                   _QuickAction(ClinicIcons.medicalBill, 'إحصائيات', ClinicColors.primaryDeep, () => store.goTo(ClinicPage.doctorStats)),
                   _QuickAction(ClinicIcons.nurse, 'المجتمع', ClinicColors.available, () => store.goTo(ClinicPage.social)),

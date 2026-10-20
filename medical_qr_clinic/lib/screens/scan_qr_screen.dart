@@ -27,7 +27,9 @@ class _ScanQrScreenState extends State<ScanQrScreen> {
   String? _lastCode;
 
   bool get _canLive {
-    if (kIsWeb) return false;
+    // mobile_scanner يدعم الويب عبر getUserMedia — يحتاج سياقاً آمناً (localhost/HTTPS)،
+    // وعند التعذر يتحول تلقائياً لوضع التقاط الصورة عبر errorBuilder.
+    if (kIsWeb) return true;
     return defaultTargetPlatform == TargetPlatform.android || defaultTargetPlatform == TargetPlatform.iOS;
   }
 
@@ -113,7 +115,7 @@ class _ScanQrScreenState extends State<ScanQrScreen> {
         if (mounted) setState(() => _handling = false);
         return;
       }
-      final code = await decodeQrFromPath(file.path);
+      final code = await decodeQrFromXFile(file);
       if (!mounted) return;
       if (code == null || code.isEmpty) {
         setState(() {
@@ -146,7 +148,7 @@ class _ScanQrScreenState extends State<ScanQrScreen> {
         if (mounted) setState(() => _handling = false);
         return;
       }
-      final code = await decodeQrFromPath(file.path);
+      final code = await decodeQrFromXFile(file);
       if (!mounted) return;
       if (code == null || code.isEmpty) {
         setState(() {
@@ -289,8 +291,10 @@ class _ScanQrScreenState extends State<ScanQrScreen> {
                     color: Colors.black54,
                     iconColor: Colors.white,
                     onTap: () async {
-                      await _controller?.toggleTorch();
-                      if (mounted) setState(() => _torch = !_torch);
+                      try {
+                        await _controller?.toggleTorch();
+                        if (mounted) setState(() => _torch = !_torch);
+                      } catch (_) {}
                     },
                   ),
               ],

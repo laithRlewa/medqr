@@ -65,8 +65,7 @@ Future<String?> pickImageAndUpload(ClinicStore store, {bool camera = false}) asy
   return store.uploadPath(file.path);
 }
 
-Future<String?> decodeQrFromPath(String path) async {
-  final bytes = await File(path).readAsBytes();
+Future<String?> decodeQrFromBytes(Uint8List bytes) async {
   final decoded = img.decodeImage(bytes);
   if (decoded == null) return null;
 
@@ -102,12 +101,20 @@ Future<String?> decodeQrFromPath(String path) async {
   return null;
 }
 
+/// يقرأ بايتات الملف الملتقط — يعمل على الويب والمنصات الأصلية.
+Future<String?> decodeQrFromXFile(XFile file) async {
+  final bytes = await file.readAsBytes();
+  return decodeQrFromBytes(bytes);
+}
+
+Future<String?> decodeQrFromPath(String path) => decodeQrFromXFile(XFile(path));
+
 Future<String?> scanQrFromDevice({bool camera = false}) async {
   final file = camera
       ? await ImagePicker().pickImage(source: ImageSource.camera, imageQuality: 95, maxWidth: 2000)
       : await pickGalleryImage(imageQuality: 95, maxWidth: 2000);
   if (file == null) return null;
-  return decodeQrFromPath(file.path);
+  return decodeQrFromXFile(file);
 }
 
 Future<void> openMedia(String url) async {

@@ -52,3 +52,6 @@ medical-qr-admin-desktop/
 
 # Logs
 *.log
+
+# Deployment archives
+*.tar
